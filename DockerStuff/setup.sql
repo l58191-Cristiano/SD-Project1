@@ -29,3 +29,11 @@ CREATE TABLE Partidas
     estado_partida VARCHAR(20)                           NOT NULL DEFAULT 'Agendado',
     ganhador       INT REFERENCES Jogadores (id_jogador)          DEFAULT NULL
 );
+
+CREATE TABLE Inscricoes
+(
+    id_inscricao SERIAL PRIMARY KEY,
+    id_jogador   INT REFERENCES Jogadores (id_jogador) NOT NULL,
+    id_torneio   INT REFERENCES Torneios (id_torneio)  NOT NULL,
+    UNIQUE (id_jogador, id_torneio)
+)
