@@ -2,7 +2,7 @@ CREATE TABLE Jogadores
 (
     id_jogador   SERIAL PRIMARY KEY,
     nome         VARCHAR(255) NOT NULL,
-    rating       INT          NOT NULL DEFAULT 0,
+    rating       INT          NOT NULL DEFAULT 800,
     email        VARCHAR(255) NOT NULL,
     clube        VARCHAR(255) NOT NULL,
     estado_admin VARCHAR(20)  NOT NULL DEFAULT 'Não Aprovado',

@@ -48,4 +48,61 @@ public class ServidorLogica {
             return false;
         }
     }
+
+    public boolean estadoAdminJogador(int idJogador, String estado_admin) {
+        String sql = "UPDATE Jogadores SET estado_admin = ? WHERE id_jogador = ?";
+        try (PreparedStatement statement = this.connector.getConnection().prepareStatement(sql)) {
+            statement.setString(1, estado_admin);
+            statement.setInt(2, idJogador);
+
+            if (statement.executeUpdate() > 0) {
+                IO.println("Estado do Jogador " + idJogador + " alterado para" + estado_admin + ".");
+                return true;
+            } else {
+                IO.println("Jogador com ID " + idJogador + "não foi encontrado.");
+                return false;
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao atualizar estado_admin: " + e.getMessage());
+            return false;
+        }
+
+    }
+
+    public boolean ratingJogador (int idJogador, int newRating) {
+        String sql = "UPDATE Jogadores SET rating = ? WHERE id_jogador = ?";
+        try (PreparedStatement statement = this.connector.getConnection().prepareStatement(sql)) {
+            statement.setInt(1, newRating);
+            statement.setInt(2, idJogador);
+
+            if (statement.executeUpdate() > 0) {
+                IO.println("Rating do jogador " + idJogador + " atualizado para " + newRating + ".");
+                return true;
+            } else {
+                IO.println("Jogador com ID " + idJogador + "não foi encontrado.");
+                return false;
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao atualizar rating: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean registarTorneios(String nome, String data, String local, int premio) {
+        String sql = "INSERT INTO Torneios (nome, data, local, premio) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement statement = this.connector.getConnection().prepareStatement(sql)) {
+            statement.setString(1, nome);
+            statement.setString(2, data);
+            statement.setString(3, local);
+            statement.setInt(4, premio);
+
+            IO.println("Torneio '" + nome + "' registado com sucesso.");
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Erro ao registar torneio: " + e.getMessage());
+            return false;
+        }
+    }
 }
