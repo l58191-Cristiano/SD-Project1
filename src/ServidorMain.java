@@ -37,10 +37,9 @@ public class ServidorMain {
             return; // Termina se a BD falhar
         }
 
-        // 4. INICIALIZAR A LÓGICA DE NEGÓCIO
-        ServidorLogica gestor = new ServidorLogica(connector);
-
-        IO.println("ServidorLógica inicializado.");
+        // 4. INICIALIZAR A LÓGICA DE NEGÓCIO (Não é usado)
+        //ServidorLogica gestor = new ServidorLogica(connector);
+        //IO.println("ServidorLógica inicializado.");
 
     }
 }

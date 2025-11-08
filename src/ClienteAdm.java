@@ -18,18 +18,10 @@ public class ClienteAdm {
 
         ClienteAdm cl = new ClienteAdm("localhost", "1099");
 
-        Echo objServidor = (Echo) java.rmi.Naming.lookup("rmi://" + cl.regHost + ":" + cl.regPort + "/echo");
+        funcAdm objServidor = (funcAdm) java.rmi.Naming.lookup("rmi://" + cl.regHost + ":" + cl.regPort + "/funcAdm");
 
         try {
-            //Chamar os métodos do Echo
-            objServidor.adicionarEcho();
-
-            List<String> list = objServidor.ListaDeEchos();
-
-            //Ver a lista devolvida
-            for(String s : list){
-                System.out.println(s);
-            }
+            //Chamar MÉTODOS AQUI
         }
         catch(Exception e){
             e.printStackTrace();
