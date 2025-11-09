@@ -2,6 +2,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.registry.LocateRegistry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Properties;
 
 public class ServidorConnc extends Thread {
@@ -31,9 +32,11 @@ public class ServidorConnc extends Thread {
             try {
                 //Criar o obj remoto
                 funcAdm obj = new funcAdmImpl(this.connector);
+
                 //Usar a Registry Local na porta do servidor, neste caso 1099
-                java.rmi.registry.Registry registry = LocateRegistry.getRegistry(this.serverPort);
-                //Dar bind no Objecto
+                java.rmi.registry.Registry registry = LocateRegistry.createRegistry(this.serverPort);
+
+                //Dar bind no Objecto stub
                 registry.rebind("funcAdm", obj);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -62,8 +65,8 @@ public class ServidorConnc extends Thread {
         // O makefile já deve fazer isso por ti
         // --> make all
         //--------------------------
-        //ServidorConnc sAdm = new ServidorConnc(1099, 0, conn);
-        //sAdm.start();
+        ServidorConnc sAdm = new ServidorConnc(1099, 0, conn);
+        sAdm.start();
 
 
         System.out.println("Servidor criado com sucesso");

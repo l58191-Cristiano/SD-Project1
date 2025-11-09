@@ -1,17 +1,19 @@
 import java.io.Serializable;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+public class funcAdmImpl extends UnicastRemoteObject implements funcAdm, Serializable {
 
-public class funcAdmImpl implements funcAdm, Serializable {
+    private PostgresConnector connector;
 
-    private final PostgresConnector connector;
-
-    public funcAdmImpl(PostgresConnector connector) {
-        this.connector = connector;
+    funcAdmImpl(PostgresConnector conn) throws RemoteException {
+        connector = conn;
     }
 
     // Listar torneios por estado_admin
@@ -51,6 +53,21 @@ public class funcAdmImpl implements funcAdm, Serializable {
             System.err.println("Erro ao listar jogadores por estado_admin: " + e.getMessage());
         }
         return jogadores;
+    }
+
+    // Listar todas as partidas
+    public List<Partida> listarPartidas() {
+        List<Partida> partidas = new ArrayList<>();
+        String sql = "SELECT * FROM Partidas";
+
+        try (PreparedStatement statement = this.connector.getConnection().prepareStatement(sql); ResultSet rs = statement.executeQuery()) {
+            while (rs.next()) {
+                partidas.add(new Partida(rs.getInt("id_partida"), rs.getInt("id_torneio"), rs.getInt("id_jogador_1"), rs.getInt("id_jogador_2"), rs.getString("estado_partida"), rs.getObject("ganhador", Integer.class)));
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao listar partidas: " + e.getMessage());
+        }
+        return partidas;
     }
 
     public boolean registarPartida(int id_torneio, int id_jogador_1, int id_jogador_2) {
@@ -189,7 +206,7 @@ public class funcAdmImpl implements funcAdm, Serializable {
         }
     }
 
-    public boolean registarTorneios(String nome, java.sql.Date data, String local, int premio) {
+    public boolean registarTorneios(String nome, Date data, String local, int premio) {
         String sql = "INSERT INTO Torneios (nome, data, local, premio) VALUES (?, ?, ?, ?)";
         try (PreparedStatement statement = this.connector.getConnection().prepareStatement(sql)) {
             statement.setString(1, nome);
@@ -256,4 +273,5 @@ public class funcAdmImpl implements funcAdm, Serializable {
         }
 
     }
+
 }

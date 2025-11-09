@@ -1,3 +1,6 @@
+import com.sun.jdi.connect.Connector;
+
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
@@ -10,7 +13,7 @@ import java.sql.DriverManager;
  */
 public class PostgresConnector {
 
-    Connection con = null;
+    private Connection con = null;
     private final String PG_HOST;
     private final String PG_PORT;
     private final String PG_DB;
