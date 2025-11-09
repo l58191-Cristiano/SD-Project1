@@ -10,6 +10,7 @@ public class ListarJogadores extends funcGeral{
     public String estado_geral;
     //Fica guardado o resultado da query
     List<Jogador> jogadoresR = new ArrayList<>();
+    public boolean completed;
 
     ListarJogadores(){
         id_torneio = -1;
@@ -17,14 +18,16 @@ public class ListarJogadores extends funcGeral{
     }
     ListarJogadores(int torneio){
         this.id_torneio = torneio;
+        this.estado_geral = null;
     }
     ListarJogadores(String estado){
         this.estado_geral = estado;
+        this.id_torneio = -1;
     }
 
 
     // Listar todos os jogadores
-    public List<Jogador> listarJogadores(PostgresConnector connector) {
+    public void listarJogadores(PostgresConnector connector) {
         List<Jogador> jogadores = new ArrayList<>();
         String sql = "SELECT * FROM Jogadores";
 
@@ -37,12 +40,12 @@ public class ListarJogadores extends funcGeral{
         } catch (SQLException e) {
             System.err.println("Erro ao listar jogadores: " + e.getMessage());
         }
+        completed = true;
         jogadoresR = jogadores;
-        return jogadores;
     }
 
     // Listar jogadores em um torneio
-    public List<Jogador> listarJogadoresTorneio(PostgresConnector connector) {
+    public void listarJogadoresTorneio(PostgresConnector connector) {
         List<Jogador> jogadores = new ArrayList<>();
         String sql = "SELECT J.* FROM Jogadores J INNER JOIN Inscricoes I ON J.id_jogador = I.id_jogador WHERE I.id_torneio = ?";
 
@@ -55,14 +58,15 @@ public class ListarJogadores extends funcGeral{
             }
 
         } catch (SQLException e) {
+            completed = false;
             System.err.println("Erro ao listar jogadores do torneio: " + e.getMessage());
         }
+        completed = true;
         jogadoresR = jogadores;
-        return jogadores;
     }
 
     // Listar jogadores por estado_geral
-    public List<Jogador> listarJogadoresGeral(PostgresConnector connector) {
+    public void listarJogadoresGeral(PostgresConnector connector) {
         List<Jogador> jogadores = new ArrayList<>();
         String sql = "SELECT * FROM Jogadores WHERE estado_geral = ?";
 
@@ -75,15 +79,22 @@ public class ListarJogadores extends funcGeral{
                 }
             }
         } catch (SQLException e) {
+            completed = false;
             System.err.println("Erro ao listar jogadores por estado_geral: " + e.getMessage());
         }
+        completed = true;
         jogadoresR = jogadores;
-        return jogadores;
     }
 
     //TODO:
     //Mostrar a Lista de Jogadores Obtida
     public void mostrarListaJogadores() {
+        System.out.println("----------------------------------------------------------------------------------------------------------------");
+        System.out.println("| ID |     Nome     |     Rating     |             Email            |        Clube        |       Estado       |");
+        for(Jogador jogador : jogadoresR){
+            System.out.printf("| %-3d| %-13s| %-15d| %-29s| %-20s| %-19s|\n", jogador.id_jogador(), jogador.nome(), jogador.rating(), jogador.email(), jogador.clube(), jogador.estado_geral());
+        }
+        System.out.println("----------------------------------------------------------------------------------------------------------------");
 
     }
 }

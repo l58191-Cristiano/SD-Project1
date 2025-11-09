@@ -213,7 +213,7 @@ public class ServidorConnc extends Thread {
         if(obj.id_torneio != -1){
             obj.listarJogadoresTorneio(this.connector);
         }
-        else if (!obj.estado_geral.equals(null)){
+        else if (obj.estado_geral != null){
             obj.listarJogadoresGeral(this.connector);
         }
         else{
@@ -224,7 +224,7 @@ public class ServidorConnc extends Thread {
         if(obj.id_jogador != -1){
             obj.listarTorneiosJogador(this.connector);
         }
-        else if (!obj.estado_torneio.equals(null)){
+        else if (obj.estado_torneio != null){
             obj.listarTorneiosEstado(this.connector);
         }
         else{

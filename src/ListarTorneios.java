@@ -84,6 +84,11 @@ public class ListarTorneios extends funcGeral {
     //TODO:
     //Fazer método de Mostrar Lista
     public void mostrarListaTorneios(){
-
+        System.out.println("-------------------------------------------------------------------------------------------");
+        System.out.println("| ID |     Nome     |     Data     |       Local        |   Premio   |       Estado       |");
+        for(Torneio torneio : torneiosR){
+            System.out.printf("| %-3d| %-13s| %-13s| %-19s| %-11d| %-19s|\n", torneio.id_torneio(), torneio.nome(), torneio.data(), torneio.local(), torneio.premio(), torneio.estado_torneio());
+        }
+        System.out.println("-------------------------------------------------------------------------------------------");
     }
 }

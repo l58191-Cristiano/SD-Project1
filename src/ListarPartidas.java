@@ -82,6 +82,12 @@ public class ListarPartidas extends funcGeral{
     //TODO:
     //Fazer método de Mostrar Lista
     public void mostrarListaPartidas(){
+        System.out.println("-------------------------------------------------------------------------------");
+        System.out.println("| ID | ID Torneio | ID Jogador1 | ID Jogador2 |       Estado       | Vencedor |");
+        for(Partida partida : partidasR){
+            System.out.printf("| %-3d| %-11d| %-12d| %-12d| %-19d| %-9d|\n", partida.id_partida(), partida.id_torneio(), partida.id_jogador1(), partida.id_jogador2(), partida.estado_partida(), partida.ganhador(), partida.ganhador());
+        }
+        System.out.println("-------------------------------------------------------------------------------");
 
     }
 }
