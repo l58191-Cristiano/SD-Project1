@@ -1,24 +1,20 @@
-import com.sun.jdi.connect.Connector;
-
-import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
 // Modificado para nao gerir Statements, apenas Connections
-// Motivo: Desta forma varios clientes pode
+// Motivo: Desta forma varios clientes podem se conectar ao banco de dados
 
 /**
- *
  * @author jsaias
  */
 public class PostgresConnector {
 
-    private Connection con = null;
     private final String PG_HOST;
     private final String PG_PORT;
     private final String PG_DB;
     private final String USER;
     private final String PWD;
+    private Connection con = null;
 
     public PostgresConnector(String host, String db, String user, String pw, String port) {
         PG_HOST = host;
@@ -41,7 +37,7 @@ public class PostgresConnector {
     }
 
     public void disconnect() {
-        // importante: fechar a ligacao 'a BD
+        // importante: fechar a ligacao a BD
         try {
             con.close();
         } catch (Exception e) {
@@ -52,5 +48,4 @@ public class PostgresConnector {
     public Connection getConnection() {
         return con;
     }
-
 }

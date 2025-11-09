@@ -10,7 +10,7 @@ import java.util.List;
 
 public class funcAdmImpl extends UnicastRemoteObject implements funcAdm, Serializable {
 
-    private PostgresConnector connector;
+    private final PostgresConnector connector;
 
     funcAdmImpl(PostgresConnector conn) throws RemoteException {
         connector = conn;

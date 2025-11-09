@@ -8,22 +8,24 @@ public class ListarTorneios extends funcGeral {
 
     public String estado_torneio;
     public int id_jogador;
-    //Fica guardado o resultado da query
+    // Fica guardado o resultado da query
     List<Torneio> torneiosR = new ArrayList<>();
 
-    public ListarTorneios(){
+    public ListarTorneios() {
         estado_torneio = null;
         id_jogador = -1;
     }
-    public ListarTorneios(int jogador){
+
+    public ListarTorneios(int jogador) {
         this.id_jogador = jogador;
     }
-    public ListarTorneios(String estado){
+
+    public ListarTorneios(String estado) {
         this.estado_torneio = estado;
     }
 
     // Listar todos os torneios
-    public List<Torneio> listarTorneios(PostgresConnector connector) {
+    public void listarTorneios(PostgresConnector connector) {
         List<Torneio> torneios = new ArrayList<>();
         String sql = "SELECT * FROM Torneios";
 
@@ -36,11 +38,10 @@ public class ListarTorneios extends funcGeral {
             System.err.println("Erro ao listar torneios: " + e.getMessage());
         }
         torneiosR = torneios;
-        return torneios;
     }
 
     // Listar torneios em que X jogador esteja
-    public List<Torneio> listarTorneiosJogador(PostgresConnector connector) {
+    public void listarTorneiosJogador(PostgresConnector connector) {
         List<Torneio> torneios = new ArrayList<>();
         String sql = "SELECT T.* FROM Torneios T INNER JOIN Inscricoes I ON T.id_torneio = I.id_torneio WHERE I.id_jogador = ?";
 
@@ -57,11 +58,10 @@ public class ListarTorneios extends funcGeral {
             System.err.println("Erro ao listar torneios do jogador: " + e.getMessage());
         }
         torneiosR = torneios;
-        return torneios;
     }
 
     // Listar torneios por estado_torneio
-    public List<Torneio> listarTorneiosEstado(PostgresConnector connector) {
+    public void listarTorneiosEstado(PostgresConnector connector) {
         List<Torneio> torneios = new ArrayList<>();
         String sql = "SELECT * FROM torneios WHERE estado_torneio = ?";
 
@@ -78,15 +78,12 @@ public class ListarTorneios extends funcGeral {
             System.err.println("Erro ao listar torneios por estado_torneio: " + e.getMessage());
         }
         torneiosR = torneios;
-        return torneios;
     }
 
-    //TODO:
-    //Fazer método de Mostrar Lista
-    public void mostrarListaTorneios(){
+    public void mostrarListaTorneios() {
         System.out.println("-------------------------------------------------------------------------------------------");
         System.out.println("| ID |     Nome     |     Data     |       Local        |   Premio   |       Estado       |");
-        for(Torneio torneio : torneiosR){
+        for (Torneio torneio : torneiosR) {
             System.out.printf("| %-3d| %-13s| %-13s| %-19s| %-11d| %-19s|\n", torneio.id_torneio(), torneio.nome(), torneio.data(), torneio.local(), torneio.premio(), torneio.estado_torneio());
         }
         System.out.println("-------------------------------------------------------------------------------------------");

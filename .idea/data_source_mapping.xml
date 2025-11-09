@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourcePerFileMappings">
+    <file url="file://$PROJECT_DIR$/DockerStuff/playground.sql" value="2d9184a9-9f1b-4c2a-a255-8a1c40ac1b8e" />
+    <file url="file://$PROJECT_DIR$/DockerStuff/sample.sql" value="2d9184a9-9f1b-4c2a-a255-8a1c40ac1b8e" />
     <file url="file://$PROJECT_DIR$/DockerStuff/setup.sql" value="2d9184a9-9f1b-4c2a-a255-8a1c40ac1b8e" />
   </component>
 </project>

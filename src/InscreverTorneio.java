@@ -12,7 +12,7 @@ public class InscreverTorneio extends funcGeral {
         id_jogador = jogador;
     }
 
-    public boolean inscreverJogadorTorneio(PostgresConnector connector) {
+    public void inscreverJogadorTorneio(PostgresConnector connector) {
         String sql = "INSERT INTO Inscricoes (id_jogador, id_torneio) VALUES (?, ?)";
         try (PreparedStatement statement = connector.getConnection().prepareStatement(sql)) {
 
@@ -22,11 +22,9 @@ public class InscreverTorneio extends funcGeral {
             if (statement.executeUpdate() > 0) {
                 IO.println("Jogador " + id_jogador + " inscrito ao torneio " + id_torneio + " com sucesso.");
                 completed = true;
-                return true;
             } else {
                 IO.println("Registo do jogador " + id_jogador + " ao torneio " + id_torneio + " falhou.");
                 completed = false;
-                return false;
             }
 
         } catch (SQLException e) {
@@ -37,7 +35,6 @@ public class InscreverTorneio extends funcGeral {
                 System.err.println("Erro ao inscrever jogador ao torneio: " + e.getMessage());
             }
             completed = false;
-            return false;
         }
     }
 }

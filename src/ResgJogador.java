@@ -1,13 +1,13 @@
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-//Registro de funcGerais
+// Registro de funcGerais
 public class ResgJogador extends funcGeral {
 
     public String nome;
     public String email;
     public String clube;
-    //Guarda o valor de resposta para o cliente
+    // Guarda o valor de resposta para o cliente
     public boolean completed;
 
     ResgJogador(String nome, String email, String clube) {

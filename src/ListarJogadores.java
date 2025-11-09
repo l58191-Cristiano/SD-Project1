@@ -4,23 +4,25 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListarJogadores extends funcGeral{
+public class ListarJogadores extends funcGeral {
 
     public int id_torneio;
     public String estado_geral;
-    //Fica guardado o resultado da query
-    List<Jogador> jogadoresR = new ArrayList<>();
     public boolean completed;
+    // Fica guardado o resultado da query
+    List<Jogador> jogadoresR = new ArrayList<>();
 
-    ListarJogadores(){
+    ListarJogadores() {
         id_torneio = -1;
         estado_geral = null;
     }
-    ListarJogadores(int torneio){
+
+    ListarJogadores(int torneio) {
         this.id_torneio = torneio;
         this.estado_geral = null;
     }
-    ListarJogadores(String estado){
+
+    ListarJogadores(String estado) {
         this.estado_geral = estado;
         this.id_torneio = -1;
     }
@@ -86,12 +88,11 @@ public class ListarJogadores extends funcGeral{
         jogadoresR = jogadores;
     }
 
-    //TODO:
-    //Mostrar a Lista de Jogadores Obtida
+    // Mostrar a Lista de Jogadores Obtida
     public void mostrarListaJogadores() {
         System.out.println("----------------------------------------------------------------------------------------------------------------");
         System.out.println("| ID |     Nome     |     Rating     |             Email            |        Clube        |       Estado       |");
-        for(Jogador jogador : jogadoresR){
+        for (Jogador jogador : jogadoresR) {
             System.out.printf("| %-3d| %-13s| %-15d| %-29s| %-20s| %-19s|\n", jogador.id_jogador(), jogador.nome(), jogador.rating(), jogador.email(), jogador.clube(), jogador.estado_geral());
         }
         System.out.println("----------------------------------------------------------------------------------------------------------------");

@@ -4,26 +4,28 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListarPartidas extends funcGeral{
+public class ListarPartidas extends funcGeral {
 
     public int id_jogador;
     public int id_torneio;
     //Fica guardado o resultado da query
     List<Partida> partidasR = new ArrayList<>();
 
-    ListarPartidas(){
+    ListarPartidas() {
         id_torneio = -1;
         id_jogador = -1;
     }
-    ListarPartidas(int jogador,  int id_torneio){
+
+    ListarPartidas(int jogador, int id_torneio) {
         this.id_jogador = jogador;
     }
-    ListarPartidas(int torneio){
+
+    ListarPartidas(int torneio) {
         this.id_torneio = torneio;
     }
 
     // Listar todas as partidas
-    public List<Partida> listarPartidas(PostgresConnector connector) {
+    public void listarPartidas(PostgresConnector connector) {
         List<Partida> partidas = new ArrayList<>();
         String sql = "SELECT * FROM Partidas";
 
@@ -35,11 +37,10 @@ public class ListarPartidas extends funcGeral{
             System.err.println("Erro ao listar partidas: " + e.getMessage());
         }
         partidasR = partidas;
-        return partidas;
     }
 
     // Listar partidas de um torneio
-    public List<Partida> listarPartidasTorneio(PostgresConnector connector) {
+    public void listarPartidasTorneio(PostgresConnector connector) {
         List<Partida> partidas = new ArrayList<>();
         String sql = "SELECT * FROM Partidas WHERE id_torneio = ?";
 
@@ -55,11 +56,10 @@ public class ListarPartidas extends funcGeral{
             System.err.println("Erro ao listar partidas do torneio: " + e.getMessage());
         }
         partidasR = partidas;
-        return partidas;
     }
 
     // Listar partidas de um Jogador
-    public List<Partida> listarPartidasJogador(PostgresConnector connector) {
+    public void listarPartidasJogador(PostgresConnector connector) {
         List<Partida> partidas = new ArrayList<>();
         String sql = "SELECT * FROM Partidas WHERE id_jogador_1 = ? OR id_jogador_2 = ?";
 
@@ -76,18 +76,14 @@ public class ListarPartidas extends funcGeral{
             System.err.println("Erro ao listar partidas do jogador: " + e.getMessage());
         }
         partidasR = partidas;
-        return partidas;
     }
 
-    //TODO:
-    //Fazer método de Mostrar Lista
-    public void mostrarListaPartidas(){
+    public void mostrarListaPartidas() {
         System.out.println("-------------------------------------------------------------------------------");
         System.out.println("| ID | ID Torneio | ID Jogador1 | ID Jogador2 |       Estado       | Vencedor |");
-        for(Partida partida : partidasR){
-            System.out.printf("| %-3d| %-11d| %-12d| %-12d| %-19d| %-9d|\n", partida.id_partida(), partida.id_torneio(), partida.id_jogador1(), partida.id_jogador2(), partida.estado_partida(), partida.ganhador(), partida.ganhador());
+        for (Partida partida : partidasR) {
+            System.out.printf("| %-3d| %-11d| %-12d| %-12d| %-19s| %-9d|\n", partida.id_partida(), partida.id_torneio(), partida.id_jogador1(), partida.id_jogador2(), partida.estado_partida(), partida.ganhador());
         }
         System.out.println("-------------------------------------------------------------------------------");
-
     }
 }
