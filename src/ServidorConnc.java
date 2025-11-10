@@ -21,7 +21,7 @@ public class ServidorConnc extends Thread {
         connector = conn;
     }
 
-    static void main(String[] args) {
+    static void main() {
 
         // Inicilizar Postgres
         PostgresConnector conn = InicializarPosGres();
@@ -114,8 +114,7 @@ public class ServidorConnc extends Thread {
 
             while (true) {
                 // Espera por uma conexão
-                Socket conn = serverSocket.accept();
-                try {
+                try (Socket conn = serverSocket.accept()) {
 
                     while (conn.isConnected()) {
                         funcGeral obj = null;
@@ -130,10 +129,8 @@ public class ServidorConnc extends Thread {
                     }
                 } catch (Exception _) {
 
-                } finally {
-                    // Fechar o socket de dados para este client adm
-                    conn.close();
                 }
+                // Fechar o socket de dados para este client adm
             }
         } catch (Exception e) {
             e.printStackTrace();

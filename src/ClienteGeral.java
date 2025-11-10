@@ -32,7 +32,6 @@ public class ClienteGeral {
                 menu(op, conn);
             }
 
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -41,8 +40,16 @@ public class ClienteGeral {
     // Menu das opções
     public static void menu(String op, Socket conn) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        // Registar Jogador
         switch (op) {
+
+            case "0" -> {
+                System.out.println("Opções do servidor: ");
+                System.out.println("1.  Registrar Jogador                2. Inscrever no Torneio            3. Listar Todos os Torneios");
+                System.out.println("4.  Listar Torneios por Jogadores    5. Listar Torneios por Estados     6. Listar Todas as Partidas");
+                System.out.println("7.  Listar Partidas por Jogadores    8. Listar Partidas por Torneios    9. Listar Todos os Jogadores");
+                System.out.println("10. Listar Jogadores por Torneio     11. Listar Jogadores por Estado    12. Sair ");
+            }
+            // Registar Jogador
             case "1" -> {
                 System.out.print("Insira o nome do Jogador: ");
                 String name = br.readLine();
@@ -55,12 +62,11 @@ public class ClienteGeral {
                 ResgJogador response = (ResgJogador) enviarObj(obj, conn);
 
                 if (response != null && response.completed) {
-                    System.out.println("O Jogador foi registrado com sucesso");
+                    System.out.println("O Jogador foi registado com sucesso");
                 } else {
-                    System.out.println("Jogador não foi registrado.");
+                    System.out.println("Jogador não foi registado.");
                 }
             }
-
             // Inscrever Torneio
             case "2" -> {
                 System.out.print("Insira o id do Torneio: ");
@@ -73,12 +79,11 @@ public class ClienteGeral {
                 InscreverTorneio response = (InscreverTorneio) enviarObj(obj, conn);
 
                 if (response != null && response.completed) {
-                    System.out.println("O Jogador foi registrado com sucesso");
+                    System.out.println("O Jogador foi registado com sucesso");
                 } else {
-                    System.out.println("Jogador não foi registrado.");
+                    System.out.println("Jogador não foi registado.");
                 }
             }
-
             // Listar Todos Torneios
             case "3" -> {
                 System.out.println("Torneios Registados: ");
@@ -92,7 +97,6 @@ public class ClienteGeral {
                     System.out.println("Erro ao listar Torneios.");
                 }
             }
-
             // Listar Torneios por Jogador
             case "4" -> {
                 System.out.print("Insira o id do Jogador: ");
@@ -109,7 +113,6 @@ public class ClienteGeral {
                     System.out.println("Erro ao listar Torneios.");
                 }
             }
-
             // Listar Torneios por Estado
             case "5" -> {
 
@@ -117,7 +120,7 @@ public class ClienteGeral {
                 System.out.println("1- Agendado     2- Ativo      3- Concluído");
                 op = br.readLine();
 
-                //Seleciona o estado apartir da escolha
+                //Seleciona o estado a partir da escolha
                 op = estadoTorneio(op);
 
                 if (op != null) {
@@ -148,7 +151,6 @@ public class ClienteGeral {
                     System.out.println("Erro ao listar Partidas.");
                 }
             }
-
             // Listar Partidas por Jogador
             case "7" -> {
 
@@ -167,7 +169,6 @@ public class ClienteGeral {
                     System.out.println("Erro ao listar Partidas.");
                 }
             }
-
             // Listar Partidas por Torneio
             case "8" -> {
                 System.out.print("Selecione o ID do Torneio: ");
@@ -185,7 +186,6 @@ public class ClienteGeral {
                     System.out.println("Erro ao listar Partidas.");
                 }
             }
-
             // Listar Todos os Jogadores
             case "9" -> {
 
@@ -201,7 +201,6 @@ public class ClienteGeral {
                 }
 
             }
-
             // Listar Jogadores por Torneio
             case "10" -> {
                 System.out.print("Selecione um Torneio: ");
@@ -218,15 +217,14 @@ public class ClienteGeral {
                     System.out.println("Erro ao listar jogadores.");
                 }
             }
-
-            //Listar Jogadores por Estado
+            // Listar Jogadores por Estado
             case "11" -> {
 
                 System.out.println("Selecione um Estado: ");
                 System.out.println("1- Inscrito     2- Em Jogo      3- Eliminado");
                 op = br.readLine();
 
-                // Seleciona o estado apartir da escolha
+                // Seleciona o estado a partir da escolha
                 op = estadoJogador(op);
 
                 // Se a opção for válida

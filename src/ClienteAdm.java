@@ -35,7 +35,7 @@ public class ClienteAdm {
             menu(objServidor);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Erro: " + e.getMessage());
         }
     }
 
@@ -57,7 +57,6 @@ public class ClienteAdm {
         System.out.println("--------------------------------------");
     }
 
-    // Não é usado por enquanto
     public static void verListaP(List<Partida> list) {
         System.out.println("-------------------------------------------------------------------------------");
         System.out.println("| ID | ID Torneio | ID Jogador1 | ID Jogador2 |       Estado       | Vencedor |");
@@ -76,8 +75,17 @@ public class ClienteAdm {
             System.out.print("Escolha uma opção: ");
             String op = br.readLine();
 
-            // Listar Jogadores
             switch (op) {
+                // Menu Principal
+                case "0" -> {
+                    System.out.println("Opções do servidor: ");
+                    System.out.println("1- Listar Jogadores por Estado de Aprovação     2- Listar Torneios por Estado de Aprovação      3- Listar Partidas ");
+                    System.out.println("4- Registar uma Partida                         5- Atualizar Estado de uma Partida              6- Atualizar Resultado de uma Partida ");
+                    System.out.println("7- Registar um Torneio                          8- Aprovar um torneio                           9- Modificar o Estado de um Torneio");
+                    System.out.println("10- Aprovar um Jogador                          11- Atualizar Rating de um Jogador              12- Atualizar Estado de um Jogador");
+                    System.out.println("13- Sair do servidor.");
+                }
+                // Listar Jogadores
                 case "1" -> {
 
                     System.out.println("Selecione o Estado de Aprovação");
@@ -97,7 +105,7 @@ public class ClienteAdm {
 
                     System.out.println("Selecione o Estado de Aprovação");
                     System.out.println("1- Aprovado         2- Não Aprovado");
-
+                    op = br.readLine();
                     op = estadoAprovacao(op);
 
                     if (op != null) {
@@ -125,13 +133,11 @@ public class ClienteAdm {
 
                     boolean result = objServidor.registarPartida(id_torneio, id_jogador1, id_jogador2);
                     if (result) {
-                        System.out.println("Partida registrada com sucesso.");
+                        System.out.println("Partida registada com sucesso.");
                     } else {
-                        System.out.println("A partida não foi registrada.");
+                        System.out.println("A partida não foi registada.");
                     }
-
                 }
-
                 // Atualizar o Estado de uma Partida
                 case "5" -> {
 
@@ -149,9 +155,7 @@ public class ClienteAdm {
                             System.out.println("O Estado não foi atualizado.");
                         }
                     }
-
                 }
-
                 // Atualizar o resultado de uma partida
                 case "6" -> {
 
@@ -168,7 +172,6 @@ public class ClienteAdm {
                         System.out.println("O Resultado não foi atualizado.");
                     }
                 }
-
                 // Registar Torneio
                 case "7" -> {
                     try {
@@ -201,14 +204,13 @@ public class ClienteAdm {
                     System.out.print("Selecione o ID do Torneio: ");
                     int id_torneio = Integer.parseInt(br.readLine());
 
-                    Boolean result = objServidor.aprovarTorneios(id_torneio);
+                    boolean result = objServidor.aprovarTorneios(id_torneio);
                     if (result) {
                         System.out.println("Torneio aprovado com sucesso.");
                     } else {
                         System.out.println("Torneio não foi aprovado.");
                     }
                 }
-
                 //Atualizar o Estado de um Torneio
                 case "9" -> {
 
@@ -227,23 +229,20 @@ public class ClienteAdm {
                         }
                     }
                 }
-
                 // Aprovar Jogador
                 case "10" -> {
 
                     System.out.print("Selecione o ID do Jogador: ");
                     int id_jogador = Integer.parseInt(br.readLine());
 
-                    Boolean result = objServidor.aprovarJogador(id_jogador);
+                    boolean result = objServidor.aprovarJogador(id_jogador);
                     if (result) {
                         System.out.println("Jogador aprovado com sucesso.");
                     } else {
                         System.out.println("Jogador não foi aprovado.");
                     }
-
                 }
-
-                // Atualizar Rating de um Jogador
+                // Atualizar rating de um Jogador
                 case "11" -> {
 
                     System.out.print("Selecione o ID do Jogador: ");
@@ -258,7 +257,6 @@ public class ClienteAdm {
                         System.out.println("Rating não foi atualizado.");
                     }
                 }
-
                 // Atualizar Estado de um Jogador
                 case "12" -> {
 
@@ -277,7 +275,6 @@ public class ClienteAdm {
                         }
                     }
                 }
-
                 // Sair do Programa
                 case "13" -> System.exit(0);
                 default -> System.out.println("Escolha Inválida.");

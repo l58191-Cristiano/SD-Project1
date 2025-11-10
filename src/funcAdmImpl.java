@@ -71,6 +71,13 @@ public class funcAdmImpl extends UnicastRemoteObject implements funcAdm, Seriali
     }
 
     public boolean registarPartida(int id_torneio, int id_jogador_1, int id_jogador_2) {
+        // Primeiro verificar se o jogador e repetido
+        if (id_jogador_1 == id_jogador_2) {
+            IO.println("AVISO: Um jogador não pode jogar contra si mesmo.");
+            return false;
+        }
+
+        // Segundo, verifica se o torneio esta aprovado e se existe
         String sqlCheck = "SELECT estado_admin FROM Torneios WHERE id_torneio = ?";
         try (PreparedStatement checkStmt = this.connector.getConnection().prepareStatement(sqlCheck)) {
             checkStmt.setInt(1, id_torneio);
@@ -94,6 +101,31 @@ public class funcAdmImpl extends UnicastRemoteObject implements funcAdm, Seriali
             return false;
         }
 
+        // Terceiro, verifica se os jogadores estao no torneio
+        String sqlCheckJogadores = "SELECT COUNT(id_jogador) FROM Inscricoes WHERE id_torneio = ? AND (id_jogador = ? OR id_jogador = ?)";
+
+        try (PreparedStatement checkJdr = this.connector.getConnection().prepareStatement(sqlCheckJogadores)) {
+            checkJdr.setInt(1, id_torneio);
+            checkJdr.setInt(2, id_jogador_1);
+            checkJdr.setInt(3, id_jogador_2);
+
+            try (ResultSet rs = checkJdr.executeQuery()) {
+                if (rs.next()) {
+                    int count = rs.getInt(1); // Resultado do COUNT
+
+                    // Se nao for 2 entao ambos nao estao no torneio
+                    if (count != 2) {
+                        IO.println("AVISO: Um ou ambos os jogadores (" + id_jogador_1 + ", " + id_jogador_2 + ") não estão inscritos no torneio " + id_torneio + ".");
+                        return false;
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao verificar inscrição dos jogadores: " + e.getMessage());
+            return false;
+        }
+
+        // Por fim, regista a partida
         String sql = "INSERT INTO Partidas (id_torneio, id_jogador_1, id_jogador_2) VALUES (?, ?, ?)";
         try (PreparedStatement statement = this.connector.getConnection().prepareStatement(sql)) {
 
@@ -105,7 +137,7 @@ public class funcAdmImpl extends UnicastRemoteObject implements funcAdm, Seriali
                 IO.println("Partida registada com sucesso.");
                 return true;
             } else {
-                IO.println("Registo da partida falhou.");
+                IO.println("Registo da partida falhou (erro no INSERT).");
                 return false;
             }
         } catch (SQLException e) {

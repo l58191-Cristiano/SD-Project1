@@ -24,7 +24,7 @@ public class PostgresConnector {
         PWD = pw;
     }
 
-    public void connect() throws Exception {
+    public void connect() {
         try {
             Class.forName("org.postgresql.Driver");
             // url = "jdbc:postgresql://host:port/database",
