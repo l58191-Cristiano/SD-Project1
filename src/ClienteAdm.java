@@ -12,13 +12,13 @@ public class ClienteAdm {
     String regHost;
     String regPort;
 
-    //Registro
+    // Registo
     public ClienteAdm(String regHost, String regPort) {
         this.regHost = regHost;
         this.regPort = regPort;
     }
 
-    static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException {
+    static void main() throws MalformedURLException, NotBoundException, RemoteException {
 
         ClienteAdm cl = new ClienteAdm("localhost", "1099");
 
@@ -27,17 +27,16 @@ public class ClienteAdm {
         try {
             System.out.println("Opções do servidor: ");
             System.out.println("1- Listar Jogadores por Estado de Aprovação     2- Listar Torneios por Estado de Aprovação      3- Listar Partidas ");
-            System.out.println("4- Regsitar uma Partida                         5- Atualizar Estado de uma Partida              6- Atualizar Resultado de uma Partida ");
-            System.out.println("7- Registrar um Torneio                         8- Aprovar um torneio                           9- Modificar o Estado de um Torneio");
-            System.out.println("10- Aprovar um Jogador                          11- Atualizar Rating de um Jogador              12- Atualizar Estado de um JOgador");
+            System.out.println("4- Registar uma Partida                         5- Atualizar Estado de uma Partida              6- Atualizar Resultado de uma Partida ");
+            System.out.println("7- Registar um Torneio                          8- Aprovar um torneio                           9- Modificar o Estado de um Torneio");
+            System.out.println("10- Aprovar um Jogador                          11- Atualizar Rating de um Jogador              12- Atualizar Estado de um Jogador");
             System.out.println("13- Sair do servidor.");
-            //Chamar MÉTODOS AQUI
+            // Chamar MÉTODOS AQUI
             menu(objServidor);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public static void verListaJ(List<Jogador> list) {
@@ -114,7 +113,7 @@ public class ClienteAdm {
                     List<Partida> lista = objServidor.listarPartidas();
                     verListaP(lista);
                 }
-                // Registrar Partidas
+                // Registar Partidas
                 case "4" -> {
 
                     System.out.print("Escreva o id do Torneio: ");
@@ -170,7 +169,7 @@ public class ClienteAdm {
                     }
                 }
 
-                // Registrar Torneio
+                // Registar Torneio
                 case "7" -> {
                     try {
 

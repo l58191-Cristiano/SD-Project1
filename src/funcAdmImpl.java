@@ -71,6 +71,29 @@ public class funcAdmImpl extends UnicastRemoteObject implements funcAdm, Seriali
     }
 
     public boolean registarPartida(int id_torneio, int id_jogador_1, int id_jogador_2) {
+        String sqlCheck = "SELECT estado_admin FROM Torneios WHERE id_torneio = ?";
+        try (PreparedStatement checkStmt = this.connector.getConnection().prepareStatement(sqlCheck)) {
+            checkStmt.setInt(1, id_torneio);
+            try (ResultSet rs = checkStmt.executeQuery()) {
+                if (rs.next()) {
+                    // Torneio foi encontrado
+                    String estado_admin = rs.getString("estado_admin");
+                    if (!estado_admin.equals("Aprovado")) {
+                        // Existe, mas nao foi aprovado
+                        IO.println("AVISO: O torneio " + id_torneio + " não está Aprovado.");
+                        return false;
+                    }
+                } else {
+                    // Torneio nao existe
+                    IO.println("ERRO: O torneio " + id_torneio + " não foi encontrado.");
+                    return false;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao verificar estado do torneio: " + e.getMessage());
+            return false;
+        }
+
         String sql = "INSERT INTO Partidas (id_torneio, id_jogador_1, id_jogador_2) VALUES (?, ?, ?)";
         try (PreparedStatement statement = this.connector.getConnection().prepareStatement(sql)) {
 
