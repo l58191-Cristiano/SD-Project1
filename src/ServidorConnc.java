@@ -126,6 +126,7 @@ public class ServidorConnc extends Thread {
                         //São realizadas funções diferentes
                         //Chamar função
                         funcClienteGeral(obj, conn);
+
                     }
                 } catch (Exception _) {
 

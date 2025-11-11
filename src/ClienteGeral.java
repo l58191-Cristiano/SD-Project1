@@ -16,7 +16,6 @@ public class ClienteGeral {
         // Para clientesGerais
         ClienteGeral cl = new ClienteGeral("localhost", 9000);
         try {
-            Socket conn = new Socket(cl.addr, cl.port);
 
             System.out.println("Opções do servidor: ");
             System.out.println("1.  Registrar Jogador                2. Inscrever no Torneio            3. Listar Todos os Torneios");
@@ -26,6 +25,7 @@ public class ClienteGeral {
 
             while (true) {
 
+                Socket conn = new Socket(cl.addr, cl.port);
                 System.out.print("Escolha uma opção: ");
                 Scanner sc = new Scanner(System.in);
                 String op = sc.nextLine();
@@ -245,6 +245,7 @@ public class ClienteGeral {
             case "12" -> System.exit(0);
             default -> System.out.println("Opção Inválida");
         }
+        conn.close();
     }
 
     public static String estadoJogador(String op) {
