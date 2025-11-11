@@ -10,6 +10,8 @@ public class ListarTorneios extends funcGeral {
     public int id_jogador;
     // Fica guardado o resultado da query
     List<Torneio> torneiosR = new ArrayList<>();
+    public String msg;
+    public boolean completed;
 
     public ListarTorneios() {
         estado_torneio = null;
@@ -35,8 +37,11 @@ public class ListarTorneios extends funcGeral {
                 torneios.add(new Torneio(rs.getInt("id_torneio"), rs.getString("nome"), rs.getDate("data"), rs.getString("local"), rs.getInt("premio"), rs.getString("estado_torneio"), rs.getString("estado_admin")));
             }
         } catch (SQLException e) {
-            System.err.println("Erro ao listar torneios: " + e.getMessage());
+            completed = false;
+            msg = "Erro ao listar torneios: " + e.getMessage();
+            System.err.println(msg);
         }
+        completed = true;
         torneiosR = torneios;
     }
 
@@ -55,8 +60,11 @@ public class ListarTorneios extends funcGeral {
             }
 
         } catch (SQLException e) {
-            System.err.println("Erro ao listar torneios do jogador: " + e.getMessage());
+            completed = false;
+            msg = "Erro ao listar torneios: " + e.getMessage();
+            System.err.println(msg);
         }
+        completed = true;
         torneiosR = torneios;
     }
 
@@ -75,8 +83,11 @@ public class ListarTorneios extends funcGeral {
 
             }
         } catch (SQLException e) {
-            System.err.println("Erro ao listar torneios por estado_torneio: " + e.getMessage());
+            completed = false;
+            msg = "Erro ao listar torneios: " + e.getMessage();
+            System.err.println(msg);
         }
+        completed = true;
         torneiosR = torneios;
     }
 

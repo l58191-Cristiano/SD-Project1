@@ -23,7 +23,7 @@ public class ClienteGeral {
             System.out.println("7.  Listar Partidas por Jogadores    8. Listar Partidas por Torneios    9. Listar Todos os Jogadores");
             System.out.println("10. Listar Jogadores por Torneio     11. Listar Jogadores por Estado    12. Sair ");
 
-            while (true) {
+            while(true){
 
                 Socket conn = new Socket(cl.addr, cl.port);
                 System.out.print("Escolha uma opção: ");
@@ -61,10 +61,10 @@ public class ClienteGeral {
 
                 ResgJogador response = (ResgJogador) enviarObj(obj, conn);
 
-                if (response != null && response.completed) {
-                    System.out.println("O Jogador foi registado com sucesso");
+                if (response != null) {
+                    System.out.println(response.msg);
                 } else {
-                    System.out.println("Jogador não foi registado.");
+                    System.out.println("Erro no objeto de retorno.");
                 }
             }
             // Inscrever Torneio
@@ -78,10 +78,10 @@ public class ClienteGeral {
 
                 InscreverTorneio response = (InscreverTorneio) enviarObj(obj, conn);
 
-                if (response != null && response.completed) {
-                    System.out.println("O Jogador foi registado com sucesso");
+                if (response != null) {
+                    System.out.println(response.msg);
                 } else {
-                    System.out.println("Jogador não foi registado.");
+                    System.out.println("Erro no objeto de retorno.");
                 }
             }
             // Listar Todos Torneios
@@ -91,10 +91,15 @@ public class ClienteGeral {
 
                 ListarTorneios response = (ListarTorneios) enviarObj(obj, conn);
 
-                if (response != null && response instanceof ListarTorneios) {
-                    response.mostrarListaTorneios();
+                if (response != null) {
+                    if(response.completed) {
+                        response.mostrarListaTorneios();
+                    }
+                    else{
+                        System.out.println(response.msg);
+                    }
                 } else {
-                    System.out.println("Erro ao listar Torneios.");
+                    System.out.println("Erro no objeto de retorno.");
                 }
             }
             // Listar Torneios por Jogador
@@ -107,10 +112,15 @@ public class ClienteGeral {
 
                 ListarTorneios response = (ListarTorneios) enviarObj(obj, conn);
 
-                if (response != null && response instanceof ListarTorneios) {
-                    response.mostrarListaTorneios();
+                if (response != null) {
+                    if(response.completed) {
+                        response.mostrarListaTorneios();
+                    }
+                    else{
+                        System.out.println(response.msg);
+                    }
                 } else {
-                    System.out.println("Erro ao listar Torneios.");
+                    System.out.println("Erro no objeto de retorno.");
                 }
             }
             // Listar Torneios por Estado
@@ -129,10 +139,15 @@ public class ClienteGeral {
 
                     ListarTorneios response = (ListarTorneios) enviarObj(obj, conn);
 
-                    if (response != null && response instanceof ListarTorneios) {
-                        response.mostrarListaTorneios();
+                    if (response != null) {
+                        if(response.completed) {
+                            response.mostrarListaTorneios();
+                        }
+                        else{
+                            System.out.println(response.msg);
+                        }
                     } else {
-                        System.out.println("Erro ao listar Torneios.");
+                        System.out.println("Erro no objeto de retorno.");
                     }
                 }
             }
@@ -145,10 +160,15 @@ public class ClienteGeral {
 
                 ListarPartidas response = (ListarPartidas) enviarObj(obj, conn);
 
-                if (response != null && response instanceof ListarPartidas) {
-                    response.mostrarListaPartidas();
+                if (response != null) {
+                    if(response.completed) {
+                        response.mostrarListaPartidas();
+                    }
+                    else{
+                        System.out.println(response.msg);
+                    }
                 } else {
-                    System.out.println("Erro ao listar Partidas.");
+                    System.out.println("Erro no objeto de retorno.");
                 }
             }
             // Listar Partidas por Jogador
@@ -163,10 +183,15 @@ public class ClienteGeral {
 
                 ListarPartidas response = (ListarPartidas) enviarObj(obj, conn);
 
-                if (response != null && response instanceof ListarPartidas) {
-                    response.mostrarListaPartidas();
+                if (response != null) {
+                    if(response.completed) {
+                        response.mostrarListaPartidas();
+                    }
+                    else{
+                        System.out.println(response.msg);
+                    }
                 } else {
-                    System.out.println("Erro ao listar Partidas.");
+                    System.out.println("Erro no objeto de retorno.");
                 }
             }
             // Listar Partidas por Torneio
@@ -180,10 +205,15 @@ public class ClienteGeral {
 
                 ListarPartidas response = (ListarPartidas) enviarObj(obj, conn);
 
-                if (response != null && response instanceof ListarPartidas) {
-                    response.mostrarListaPartidas();
+                if (response != null) {
+                    if(response.completed) {
+                        response.mostrarListaPartidas();
+                    }
+                    else{
+                        System.out.println(response.msg);
+                    }
                 } else {
-                    System.out.println("Erro ao listar Partidas.");
+                    System.out.println("Erro no objeto de retorno.");
                 }
             }
             // Listar Todos os Jogadores
@@ -194,10 +224,15 @@ public class ClienteGeral {
 
                 ListarJogadores response = (ListarJogadores) enviarObj(obj, conn);
 
-                if (response != null && response instanceof ListarJogadores) {
-                    response.mostrarListaJogadores();
+                if (response != null) {
+                    if(response.completed) {
+                        response.mostrarListaJogadores();
+                    }
+                    else{
+                        System.out.println(response.msg);
+                    }
                 } else {
-                    System.out.println("Erro ao listar jogadores.");
+                    System.out.println("Erro no objeto de retorno.");
                 }
 
             }
@@ -211,10 +246,15 @@ public class ClienteGeral {
 
                 ListarJogadores response = (ListarJogadores) enviarObj(obj, conn);
 
-                if (response != null && response instanceof ListarJogadores) {
-                    response.mostrarListaJogadores();
+                if (response != null) {
+                    if(response.completed) {
+                        response.mostrarListaJogadores();
+                    }
+                    else{
+                        System.out.println(response.msg);
+                    }
                 } else {
-                    System.out.println("Erro ao listar jogadores.");
+                    System.out.println("Erro no objeto de retorno.");
                 }
             }
             // Listar Jogadores por Estado
@@ -234,10 +274,15 @@ public class ClienteGeral {
 
                     ListarJogadores response = (ListarJogadores) enviarObj(obj, conn);
 
-                    if (response != null && response instanceof ListarJogadores) {
-                        response.mostrarListaJogadores();
+                    if (response != null) {
+                        if(response.completed) {
+                            response.mostrarListaJogadores();
+                        }
+                        else{
+                            System.out.println(response.msg);
+                        }
                     } else {
-                        System.out.println("Erro ao listar jogadores.");
+                        System.out.println("Erro no objeto de retorno.");
                     }
                 }
             }

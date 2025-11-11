@@ -11,6 +11,7 @@ public class ListarJogadores extends funcGeral {
     public boolean completed;
     // Fica guardado o resultado da query
     List<Jogador> jogadoresR = new ArrayList<>();
+    public String msg;
 
     ListarJogadores() {
         id_torneio = -1;
@@ -40,7 +41,9 @@ public class ListarJogadores extends funcGeral {
             }
 
         } catch (SQLException e) {
-            System.err.println("Erro ao listar jogadores: " + e.getMessage());
+            completed = false;
+            msg = "Erro ao listar torneios: " + e.getMessage();
+            System.err.println(msg);
         }
         completed = true;
         jogadoresR = jogadores;
@@ -61,7 +64,8 @@ public class ListarJogadores extends funcGeral {
 
         } catch (SQLException e) {
             completed = false;
-            System.err.println("Erro ao listar jogadores do torneio: " + e.getMessage());
+            msg = "Erro ao listar torneios: " + e.getMessage();
+            System.err.println(msg);
         }
         completed = true;
         jogadoresR = jogadores;
@@ -82,7 +86,8 @@ public class ListarJogadores extends funcGeral {
             }
         } catch (SQLException e) {
             completed = false;
-            System.err.println("Erro ao listar jogadores por estado_geral: " + e.getMessage());
+            msg = "Erro ao listar torneios: " + e.getMessage();
+            System.err.println(msg);
         }
         completed = true;
         jogadoresR = jogadores;

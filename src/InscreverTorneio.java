@@ -5,7 +5,7 @@ public class InscreverTorneio extends funcGeral {
 
     public int id_torneio;
     public int id_jogador;
-    public boolean completed;
+    public String msg;
 
     public InscreverTorneio(int torneio, int jogador) {
         id_torneio = torneio;
@@ -20,21 +20,22 @@ public class InscreverTorneio extends funcGeral {
             statement.setInt(2, id_torneio);
 
             if (statement.executeUpdate() > 0) {
-                IO.println("Jogador " + id_jogador + " inscrito ao torneio " + id_torneio + " com sucesso.");
-                completed = true;
+                msg = "Jogador " + id_jogador + " inscrito ao torneio " + id_torneio + " com sucesso.";
+                IO.println(msg);
             } else {
-                IO.println("Registo do jogador " + id_jogador + " ao torneio " + id_torneio + " falhou.");
-                completed = false;
+                msg = "Registo do jogador " + id_jogador + " ao torneio " + id_torneio + " falhou.";
+                IO.println(msg);
             }
 
         } catch (SQLException e) {
             // O codigo 23505 é para unique_violation
             if (e.getSQLState().equals("23505")) {
-                System.err.println("Erro: O jogador " + id_jogador + " já está inscrito no torneio " + id_torneio + ".");
+                msg ="Erro: O jogador " + id_jogador + " já está inscrito no torneio " + id_torneio + ".";
+                System.err.println(msg);
             } else {
-                System.err.println("Erro ao inscrever jogador ao torneio: " + e.getMessage());
+                msg ="Erro ao inscrever jogador ao torneio: " + e.getMessage();
+                System.err.println(msg);
             }
-            completed = false;
         }
     }
 }

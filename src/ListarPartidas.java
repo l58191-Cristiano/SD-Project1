@@ -10,6 +10,8 @@ public class ListarPartidas extends funcGeral {
     public int id_torneio;
     //Fica guardado o resultado da query
     List<Partida> partidasR = new ArrayList<>();
+    public String msg;
+    public boolean completed;
 
     ListarPartidas() {
         id_torneio = -1;
@@ -34,8 +36,11 @@ public class ListarPartidas extends funcGeral {
                 partidas.add(new Partida(rs.getInt("id_partida"), rs.getInt("id_torneio"), rs.getInt("id_jogador_1"), rs.getInt("id_jogador_2"), rs.getString("estado_partida"), rs.getObject("ganhador", Integer.class)));
             }
         } catch (SQLException e) {
-            System.err.println("Erro ao listar partidas: " + e.getMessage());
+            completed = false;
+            msg = "Erro ao listar torneios: " + e.getMessage();
+            System.err.println(msg);
         }
+        completed = true;
         partidasR = partidas;
     }
 
@@ -53,8 +58,11 @@ public class ListarPartidas extends funcGeral {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Erro ao listar partidas do torneio: " + e.getMessage());
+            completed = false;
+            msg = "Erro ao listar torneios: " + e.getMessage();
+            System.err.println(msg);
         }
+        completed = true;
         partidasR = partidas;
     }
 
@@ -73,8 +81,11 @@ public class ListarPartidas extends funcGeral {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Erro ao listar partidas do jogador: " + e.getMessage());
+            completed = false;
+            msg = "Erro ao listar torneios: " + e.getMessage();
+            System.err.println(msg);
         }
+        completed = true;
         partidasR = partidas;
     }
 

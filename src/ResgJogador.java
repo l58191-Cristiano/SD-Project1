@@ -8,7 +8,7 @@ public class ResgJogador extends funcGeral {
     public String email;
     public String clube;
     // Guarda o valor de resposta para o cliente
-    public boolean completed;
+    public String msg;
 
     ResgJogador(String nome, String email, String clube) {
         this.nome = nome;
@@ -25,15 +25,15 @@ public class ResgJogador extends funcGeral {
             statement.setString(3, clube); // O terceiro '?' é o clube
 
             if (statement.executeUpdate() > 0) {
-                IO.println("Jogador " + nome + " registado com sucesso.");
-                completed = true;
+                msg = "Jogador " + nome + " registado com sucesso.";
+                IO.println(msg);
             } else {
-                IO.println("Registo do jogador " + nome + " falhou.");
-                completed = false;
+                msg = "Registo do jogador " + nome + " falhou.";
+                IO.println(msg);
             }
         } catch (SQLException e) {
-            System.err.println("Erro ao registar jogador: " + e.getMessage());
-            completed = false;
+            msg = "Erro ao registar jogador: " + e.getMessage();
+            System.err.println(msg);
         }
     }
 

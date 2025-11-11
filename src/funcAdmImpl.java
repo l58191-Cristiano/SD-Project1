@@ -70,11 +70,11 @@ public class funcAdmImpl extends UnicastRemoteObject implements funcAdm, Seriali
         return partidas;
     }
 
-    public boolean registarPartida(int id_torneio, int id_jogador_1, int id_jogador_2) {
+    public String registarPartida(int id_torneio, int id_jogador_1, int id_jogador_2) {
         // Primeiro verificar se o jogador e repetido
         if (id_jogador_1 == id_jogador_2) {
             IO.println("AVISO: Um jogador não pode jogar contra si mesmo.");
-            return false;
+            return "AVISO: Um jogador não pode jogar contra si mesmo.";
         }
 
         // Segundo, verifica se o torneio esta aprovado e se existe
@@ -88,17 +88,17 @@ public class funcAdmImpl extends UnicastRemoteObject implements funcAdm, Seriali
                     if (!estado_admin.equals("Aprovado")) {
                         // Existe, mas nao foi aprovado
                         IO.println("AVISO: O torneio " + id_torneio + " não está Aprovado.");
-                        return false;
+                        return "AVISO: O torneio " + id_torneio + " não está Aprovado.";
                     }
                 } else {
                     // Torneio nao existe
                     IO.println("ERRO: O torneio " + id_torneio + " não foi encontrado.");
-                    return false;
+                    return "ERRO: O torneio " + id_torneio + " não foi encontrado.";
                 }
             }
         } catch (SQLException e) {
             System.err.println("Erro ao verificar estado do torneio: " + e.getMessage());
-            return false;
+            return "Erro ao verificar estado do torneio: " + e.getMessage();
         }
 
         // Terceiro, verifica se os jogadores estao no torneio
@@ -116,13 +116,13 @@ public class funcAdmImpl extends UnicastRemoteObject implements funcAdm, Seriali
                     // Se nao for 2 entao ambos nao estao no torneio
                     if (count != 2) {
                         IO.println("AVISO: Um ou ambos os jogadores (" + id_jogador_1 + ", " + id_jogador_2 + ") não estão inscritos no torneio " + id_torneio + ".");
-                        return false;
+                        return "AVISO: Um ou ambos os jogadores (" + id_jogador_1 + ", " + id_jogador_2 + ") não estão inscritos no torneio " + id_torneio + ".";
                     }
                 }
             }
         } catch (SQLException e) {
             System.err.println("Erro ao verificar inscrição dos jogadores: " + e.getMessage());
-            return false;
+            return "AVISO: Um ou ambos os jogadores (" + id_jogador_1 + ", " + id_jogador_2 + ") não estão inscritos no torneio " + id_torneio + ".";
         }
 
         // Por fim, regista a partida
@@ -135,18 +135,18 @@ public class funcAdmImpl extends UnicastRemoteObject implements funcAdm, Seriali
 
             if (statement.executeUpdate() > 0) {
                 IO.println("Partida registada com sucesso.");
-                return true;
+                return "Partida registada com sucesso.";
             } else {
                 IO.println("Registo da partida falhou (erro no INSERT).");
-                return false;
+                return "Registo da partida falhou (erro no INSERT).";
             }
         } catch (SQLException e) {
             System.err.println("Erro ao registar partida: " + e.getMessage());
-            return false;
+            return "Erro ao registar partida: " + e.getMessage();
         }
     }
 
-    public boolean resultadoPartida(int id_partida, int id_jogador) {
+    public String resultadoPartida(int id_partida, int id_jogador) {
         String sql = "UPDATE Partidas SET estado_partida = 'Encerrado', ganhador = ? WHERE id_partida = ? AND (id_jogador_1 = ? OR id_jogador_2 = ?)";
         try (PreparedStatement statement = this.connector.getConnection().prepareStatement(sql)) {
             statement.setInt(1, id_jogador);
@@ -156,24 +156,24 @@ public class funcAdmImpl extends UnicastRemoteObject implements funcAdm, Seriali
 
             if (statement.executeUpdate() > 0) {
                 IO.println("Resultado da partida " + id_partida + " registado com sucesso.");
-                return true;
+                return "Resultado da partida " + id_partida + " registado com sucesso.";
             } else {
                 IO.println("Falha: Partida " + id_partida + " não encontrada ou Jogador " + id_jogador + " não participou.");
-                return false;
+                return "Falha: Partida " + id_partida + " não encontrada ou Jogador " + id_jogador + " não participou.";
             }
 
         } catch (SQLException e) {
             System.err.println("Erro ao registar resultado da partida: " + e.getMessage());
-            return false;
+            return "Erro ao registar resultado da partida: " + e.getMessage();
         }
 
     }
 
-    public boolean estadoPartida(int id_partida, String estado_partida) {
+    public String estadoPartida(int id_partida, String estado_partida) {
 
         if (!estado_partida.equals("Agendado") && !estado_partida.equals("Decorrer") && !estado_partida.equals("Encerrado")) {
             System.err.println("Erro: Estado de partida inválida: " + estado_partida);
-            return false;
+            return "Erro: Estado de partida inválida: " + estado_partida;
         }
 
         String sql = "UPDATE Partidas SET estado_partida = ? WHERE id_partida = ?";
@@ -183,43 +183,43 @@ public class funcAdmImpl extends UnicastRemoteObject implements funcAdm, Seriali
 
             if (statement.executeUpdate() > 0) {
                 IO.println("Estado da partida " + id_partida + " alterado para '" + estado_partida + "'.");
-                return true;
+                return "Estado da partida " + id_partida + " alterado para '" + estado_partida + "'.";
             } else {
                 IO.println("Partida com ID " + id_partida + " não foi encontrada.");
-                return false;
+                return "Partida com ID " + id_partida + " não foi encontrada.";
             }
 
         } catch (SQLException e) {
             System.err.println("Erro ao atualizar estado da partida: " + e.getMessage());
-            return false;
+            return "Erro ao atualizar estado da partida: " + e.getMessage();
         }
     }
 
-    public boolean aprovarJogador(int id_jogador) {
+    public String aprovarJogador(int id_jogador) {
         String sql = "UPDATE Jogadores SET estado_admin = 'Aprovado' WHERE id_jogador = ?";
         try (PreparedStatement statement = this.connector.getConnection().prepareStatement(sql)) {
             statement.setInt(1, id_jogador);
 
             if (statement.executeUpdate() > 0) {
                 IO.println("Jogador com ID " + id_jogador + " aprovado com sucesso.");
-                return true;
+                return "Jogador com ID " + id_jogador + " aprovado com sucesso.";
             } else {
                 IO.println("Jogador com ID " + id_jogador + "não foi encontrado.");
-                return false;
+                return "Jogador com ID " + id_jogador + "não foi encontrado.";
             }
 
         } catch (SQLException e) {
             System.err.println("Erro ao aprovar jogador: " + e.getMessage());
-            return false;
+            return "Erro ao aprovar jogador: " + e.getMessage();
         }
     }
 
-    public boolean estadoGeralJogador(int id_jogador, String estado_geral) {
+    public String estadoGeralJogador(int id_jogador, String estado_geral) {
 
         // Valida o input, independentemente do que o cliente envia
         if (!estado_geral.equals("Em Jogo") && !estado_geral.equals("Eliminado") && !estado_geral.equals("Inscrito")) {
             System.err.println("Erro: Estado geral inválido: " + estado_geral);
-            return false;
+            return "Erro: Estado geral inválido: " + estado_geral;
         }
 
         String sql = "UPDATE Jogadores SET estado_geral = ? WHERE id_jogador = ?";
@@ -229,19 +229,19 @@ public class funcAdmImpl extends UnicastRemoteObject implements funcAdm, Seriali
 
             if (statement.executeUpdate() > 0) {
                 IO.println("Estado do Jogador " + id_jogador + " alterado para '" + estado_geral + "'.");
-                return true;
+                return "Estado do Jogador " + id_jogador + " alterado para '" + estado_geral + "'.";
             } else {
                 IO.println("Jogador com ID " + id_jogador + " não foi encontrado.");
-                return false;
+                return "Jogador com ID " + id_jogador + " não foi encontrado.";
             }
 
         } catch (SQLException e) {
             System.err.println("Erro ao atualizar estado_geral: " + e.getMessage());
-            return false;
+            return "Erro ao atualizar estado_geral: " + e.getMessage();
         }
     }
 
-    public boolean ratingJogador(int id_jogador, int newRating) {
+    public String ratingJogador(int id_jogador, int newRating) {
         String sql = "UPDATE Jogadores SET rating = ? WHERE id_jogador = ?";
         try (PreparedStatement statement = this.connector.getConnection().prepareStatement(sql)) {
             statement.setInt(1, newRating);
@@ -249,19 +249,19 @@ public class funcAdmImpl extends UnicastRemoteObject implements funcAdm, Seriali
 
             if (statement.executeUpdate() > 0) {
                 IO.println("Rating do jogador " + id_jogador + " atualizado para " + newRating + ".");
-                return true;
+                return "Rating do jogador " + id_jogador + " atualizado para " + newRating + ".";
             } else {
                 IO.println("Jogador com ID " + id_jogador + "não foi encontrado.");
-                return false;
+                return "Jogador com ID " + id_jogador + "não foi encontrado.";
             }
 
         } catch (SQLException e) {
             System.err.println("Erro ao atualizar rating: " + e.getMessage());
-            return false;
+            return "Erro ao atualizar rating: " + e.getMessage();
         }
     }
 
-    public boolean registarTorneios(String nome, Date data, String local, int premio) {
+    public String registarTorneios(String nome, Date data, String local, int premio) {
         String sql = "INSERT INTO Torneios (nome, data, local, premio) VALUES (?, ?, ?, ?)";
         try (PreparedStatement statement = this.connector.getConnection().prepareStatement(sql)) {
             statement.setString(1, nome);
@@ -271,18 +271,18 @@ public class funcAdmImpl extends UnicastRemoteObject implements funcAdm, Seriali
 
             if (statement.executeUpdate() > 0) {
                 IO.println("Torneio " + nome + " registado com sucesso.");
-                return true;
+                return "Torneio " + nome + " registado com sucesso.";
             } else {
                 IO.println("Registo do torneio " + nome + " falhou.");
-                return false;
+                return "Registo do torneio " + nome + " falhou.";
             }
         } catch (SQLException e) {
             System.err.println("Erro ao registar torneio: " + e.getMessage());
-            return false;
+            return "Erro ao registar torneio: " + e.getMessage();
         }
     }
 
-    public boolean aprovarTorneios(int id_torneio) {
+    public String aprovarTorneios(int id_torneio) {
         String sql = "UPDATE Torneios SET estado_admin = 'Aprovado' WHERE id_torneio = ?";
 
         try (PreparedStatement statement = this.connector.getConnection().prepareStatement(sql)) {
@@ -290,23 +290,23 @@ public class funcAdmImpl extends UnicastRemoteObject implements funcAdm, Seriali
 
             if (statement.executeUpdate() > 0) {
                 IO.println("Torneio com ID " + id_torneio + " aprovado com sucesso.");
-                return true;
+                return "Torneio com ID " + id_torneio + " aprovado com sucesso.";
             } else {
                 IO.println("Torneio com ID " + id_torneio + "não foi encontrado.");
-                return false;
+                return "Torneio com ID " + id_torneio + "não foi encontrado.";
             }
 
         } catch (SQLException e) {
             System.err.println("Erro ao aprovar torneio: " + e.getMessage());
-            return false;
+            return "Erro ao aprovar torneio: " + e.getMessage();
         }
     }
 
-    public boolean estadoGeralTorneio(int id_torneio, String estado_torneio) {
+    public String estadoGeralTorneio(int id_torneio, String estado_torneio) {
 
         if (!estado_torneio.equals("Agendado") && !estado_torneio.equals("Ativo") && !estado_torneio.equals("Encerrado")) {
             System.err.println("Erro: Estado do torneio inválido: " + estado_torneio);
-            return false;
+            return "Erro: Estado do torneio inválido: " + estado_torneio;
         }
 
         String sql = "UPDATE torneios SET estado_torneio = ? WHERE id_torneio = ?";
@@ -316,15 +316,15 @@ public class funcAdmImpl extends UnicastRemoteObject implements funcAdm, Seriali
 
             if (statement.executeUpdate() > 0) {
                 IO.println("Estado do torneio " + id_torneio + " alterado para '" + estado_torneio + "'.");
-                return true;
+                return "Estado do torneio " + id_torneio + " alterado para '" + estado_torneio + "'.";
             } else {
                 IO.println("Torneio com ID " + id_torneio + " não foi encontrado.");
-                return false;
+                return "Torneio com ID " + id_torneio + " não foi encontrado.";
             }
 
         } catch (SQLException e) {
             System.err.println("Erro ao atualizar estado_torneio: " + e.getMessage());
-            return false;
+            return "Erro ao atualizar estado_torneio: " + e.getMessage();
         }
 
     }
