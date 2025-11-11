@@ -1,12 +1,44 @@
-#Make File
-#Variáveis
+# === Paths ===
 SRC_DIR = src
-BUILD_DIR = out/production/SD-Project1
-CLASSPATH = $(BUILD_DIR)
-JAVA_FILES = $(shell find $(SRC_DIR) -name "*.java")
-#Targets
-all: compile run-nameserver
+OUT_DIR = out
+LIB_DIR = resources
+
+# === Libraries ===
+LIBS = $(wildcard $(LIB_DIR)/*.jar)
+
+# === Java Tools ===
+JAVAC = javac
+JAVA = java
+
+# === Compilation Flags ===
+JFLAGS = -d $(OUT_DIR) -cp "$(LIB_DIR)/*"
+
+# === All .java source files ===
+SOURCES = $(shell find $(SRC_DIR) -name "*.java")
+
+# === Main classes to run ===
+MAINS = ClienteAdm ClienteGeral ServidorConnc
+
+# === Default target ===
+all: compile
+
+# === Compile all .java files ===
 compile:
-	javac -d $(BUILD_DIR) -classpath $(CLASSPATH) $(JAVA_FILES)
-run-nameserver:
-	rmiregistry -J-classpath -J$(CLASSPATH) 1099
+	$(JAVAC) $(JFLAGS) $(SOURCES)
+
+# === Run all main classes ===
+run-server:
+	$(JAVA) -cp "$(OUT_DIR):$(LIB_DIR)/*" ServidorConnc
+
+run-clientAdm:
+	$(JAVA) -cp "$(OUT_DIR):$(LIB_DIR)/*" ClienteAdm
+
+run-clientGeral:
+	$(JAVA) -cp "$(OUT_DIR):$(LIB_DIR)/*" ClienteGeral
+
+# === Clean compiled classes ===
+clean:
+	@echo "🧹 Cleaning build..."
+	rm -rf $(OUT_DIR)/*
+	@echo "✅ Done."
+
