@@ -1,44 +1,31 @@
-# === Paths ===
+# Caminhos
 SRC_DIR = src
 OUT_DIR = out
 LIB_DIR = resources
 
-# === Libraries ===
+# Livrarias/Classes Externas
 LIBS = $(wildcard $(LIB_DIR)/*.jar)
 
-# === Java Tools ===
-JAVAC = javac
-JAVA = java
-
-# === Compilation Flags ===
+# Flags para Compile
 JFLAGS = -d $(OUT_DIR) -cp "$(LIB_DIR)/*"
 
-# === All .java source files ===
+# Seleciona todos os ficheiros .java na source
 SOURCES = $(shell find $(SRC_DIR) -name "*.java")
 
-# === Main classes to run ===
-MAINS = ClienteAdm ClienteGeral ServidorConnc
+# Default - Compile e abre o servidor
+all: compile run-server
 
-# === Default target ===
-all: compile
-
-# === Compile all .java files ===
+# Compilar todas as classes
 compile:
 	$(JAVAC) $(JFLAGS) $(SOURCES)
 
-# === Run all main classes ===
+# Run das Classes Principais
 run-server:
-	$(JAVA) -cp "$(OUT_DIR):$(LIB_DIR)/*" ServidorConnc
+	java -cp "$(OUT_DIR):$(LIB_DIR)/*" ServidorConnc
 
 run-clientAdm:
-	$(JAVA) -cp "$(OUT_DIR):$(LIB_DIR)/*" ClienteAdm
+	java -cp "$(OUT_DIR):$(LIB_DIR)/*" ClienteAdm
 
 run-clientGeral:
-	$(JAVA) -cp "$(OUT_DIR):$(LIB_DIR)/*" ClienteGeral
-
-# === Clean compiled classes ===
-clean:
-	@echo "🧹 Cleaning build..."
-	rm -rf $(OUT_DIR)/*
-	@echo "✅ Done."
+	java -cp "$(OUT_DIR):$(LIB_DIR)/*" ClienteGeral
 
