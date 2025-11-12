@@ -94,12 +94,12 @@ public class ListarJogadores extends funcGeral {
 
     // Mostrar a Lista de Jogadores Obtida
     public void mostrarListaJogadores() {
-        System.out.println("----------------------------------------------------------------------------------------------------------------");
-        System.out.println("| ID |     Nome     |     Rating     |             Email            |        Clube        |       Estado       |");
+        System.out.println("----------------------------------------------------------------------------------------------------------------------");
+        System.out.println("| ID |           Nome           |     Rating     |             Email            |        Clube        |    Estado    |");
         for (Jogador jogador : jogadoresR) {
-            System.out.printf("| %-3d| %-13s| %-15d| %-29s| %-20s| %-19s|\n", jogador.id_jogador(), jogador.nome(), jogador.rating(), jogador.email(), jogador.clube(), jogador.estado_geral());
+            System.out.printf("| %-3d| %-25s| %-15d| %-29s| %-20s| %-13s|\n", jogador.id_jogador(), jogador.nome(), jogador.rating(), jogador.email(), jogador.clube(), jogador.estado_geral());
         }
-        System.out.println("----------------------------------------------------------------------------------------------------------------");
+        System.out.println("----------------------------------------------------------------------------------------------------------------------");
 
     }
 }

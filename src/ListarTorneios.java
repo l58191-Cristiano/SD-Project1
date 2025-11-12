@@ -19,10 +19,12 @@ public class ListarTorneios extends funcGeral {
     }
 
     public ListarTorneios(int jogador) {
+        this.estado_torneio = null;
         this.id_jogador = jogador;
     }
 
     public ListarTorneios(String estado) {
+        this.id_jogador = -1;
         this.estado_torneio = estado;
     }
 
@@ -92,11 +94,11 @@ public class ListarTorneios extends funcGeral {
     }
 
     public void mostrarListaTorneios() {
-        System.out.println("-------------------------------------------------------------------------------------------");
-        System.out.println("| ID |     Nome     |     Data     |       Local        |   Premio   |       Estado       |");
+        System.out.println("------------------------------------------------------------------------------------------");
+        System.out.println("| ID |           Nome           |     Data     |     Local     |   Premio   |   Estado   |");
         for (Torneio torneio : torneiosR) {
-            System.out.printf("| %-3d| %-13s| %-13s| %-19s| %-11d| %-19s|\n", torneio.id_torneio(), torneio.nome(), torneio.data(), torneio.local(), torneio.premio(), torneio.estado_torneio());
+            System.out.printf("| %-3d| %-25s| %-13s| %-14s| %-11d| %-11s|\n", torneio.id_torneio(), torneio.nome(), torneio.data(), torneio.local(), torneio.premio(), torneio.estado_torneio());
         }
-        System.out.println("-------------------------------------------------------------------------------------------");
+        System.out.println("------------------------------------------------------------------------------------------");
     }
 }

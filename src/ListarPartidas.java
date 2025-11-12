@@ -19,10 +19,12 @@ public class ListarPartidas extends funcGeral {
     }
 
     ListarPartidas(int jogador, int id_torneio) {
+        this.id_torneio = -1;
         this.id_jogador = jogador;
     }
 
     ListarPartidas(int torneio) {
+        this.id_jogador = -1;
         this.id_torneio = torneio;
     }
 
@@ -90,11 +92,11 @@ public class ListarPartidas extends funcGeral {
     }
 
     public void mostrarListaPartidas() {
-        System.out.println("-------------------------------------------------------------------------------");
-        System.out.println("| ID | ID Torneio | ID Jogador1 | ID Jogador2 |       Estado       | Vencedor |");
+        System.out.println("-----------------------------------------------------------------------");
+        System.out.println("| ID | ID Torneio | ID Jogador1 | ID Jogador2 |   Estado   | Vencedor |");
         for (Partida partida : partidasR) {
-            System.out.printf("| %-3d| %-11d| %-12d| %-12d| %-19s| %-9d|\n", partida.id_partida(), partida.id_torneio(), partida.id_jogador1(), partida.id_jogador2(), partida.estado_partida(), partida.ganhador());
+            System.out.printf("| %-3d| %-11d| %-12d| %-12d| %-11s| %-9d|\n", partida.id_partida(), partida.id_torneio(), partida.id_jogador1(), partida.id_jogador2(), partida.estado_partida(), partida.ganhador());
         }
-        System.out.println("-------------------------------------------------------------------------------");
+        System.out.println("-----------------------------------------------------------------------");
     }
 }

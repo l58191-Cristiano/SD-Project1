@@ -44,6 +44,7 @@ public class ServidorConnc extends Thread {
         //--------------------------
         ServidorConnc sAdm = new ServidorConnc(1099, 0, conn);
         sAdm.start();
+
         System.out.println("Servidor criado com sucesso");
     }
 
@@ -210,7 +211,7 @@ public class ServidorConnc extends Thread {
     public void listarPartidas(ListarPartidas obj) {
         if (obj.id_jogador != -1) {
             obj.listarPartidasJogador(this.connector);
-        } else if (obj.id_torneio != 1) {
+        } else if (obj.id_torneio != -1) {
             obj.listarPartidasTorneio(this.connector);
         } else {
             obj.listarPartidas(this.connector);

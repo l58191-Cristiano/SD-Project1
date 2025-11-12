@@ -40,100 +40,56 @@ public class ClienteGeral {
     // Menu das opções
     public static void menu(String op, Socket conn) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        switch (op) {
 
-            case "0" -> {
-                System.out.println("Opções do servidor: ");
-                System.out.println("1.  Registrar Jogador                2. Inscrever no Torneio            3. Listar Todos os Torneios");
-                System.out.println("4.  Listar Torneios por Jogadores    5. Listar Torneios por Estados     6. Listar Todas as Partidas");
-                System.out.println("7.  Listar Partidas por Jogadores    8. Listar Partidas por Torneios    9. Listar Todos os Jogadores");
-                System.out.println("10. Listar Jogadores por Torneio     11. Listar Jogadores por Estado    12. Sair ");
-            }
-            // Registar Jogador
-            case "1" -> {
-                System.out.print("Insira o nome do Jogador: ");
-                String name = br.readLine();
-                System.out.print("Insira o email do Jogador: ");
-                String email = br.readLine();
-                System.out.print("Insira o clube do Jogador: ");
-                String clube = br.readLine();
-                ResgJogador obj = new ResgJogador(name, email, clube);
+        try {
+            switch (op) {
 
-                ResgJogador response = (ResgJogador) enviarObj(obj, conn);
-
-                if (response != null) {
-                    System.out.println(response.msg);
-                } else {
-                    System.out.println("Erro no objeto de retorno.");
+                case "0" -> {
+                    System.out.println("Opções do servidor: ");
+                    System.out.println("1.  Registrar Jogador                2. Inscrever no Torneio            3. Listar Todos os Torneios");
+                    System.out.println("4.  Listar Torneios por Jogadores    5. Listar Torneios por Estados     6. Listar Todas as Partidas");
+                    System.out.println("7.  Listar Partidas por Jogadores    8. Listar Partidas por Torneios    9. Listar Todos os Jogadores");
+                    System.out.println("10. Listar Jogadores por Torneio     11. Listar Jogadores por Estado    12. Sair ");
                 }
-            }
-            // Inscrever Torneio
-            case "2" -> {
-                System.out.print("Insira o id do Torneio: ");
-                int torneio = Integer.parseInt(br.readLine());
-                System.out.print("Insira o id do Jogador: ");
-                int jogador = Integer.parseInt(br.readLine());
+                // Registar Jogador
+                case "1" -> {
+                    System.out.print("Insira o nome do Jogador: ");
+                    String name = br.readLine();
+                    System.out.print("Insira o email do Jogador: ");
+                    String email = br.readLine();
+                    System.out.print("Insira o clube do Jogador: ");
+                    String clube = br.readLine();
+                    ResgJogador obj = new ResgJogador(name, email, clube);
 
-                InscreverTorneio obj = new InscreverTorneio(torneio, jogador);
+                    ResgJogador response = (ResgJogador) enviarObj(obj, conn);
 
-                InscreverTorneio response = (InscreverTorneio) enviarObj(obj, conn);
-
-                if (response != null) {
-                    System.out.println(response.msg);
-                } else {
-                    System.out.println("Erro no objeto de retorno.");
-                }
-            }
-            // Listar Todos Torneios
-            case "3" -> {
-                System.out.println("Torneios Registados: ");
-                ListarTorneios obj = new ListarTorneios();
-
-                ListarTorneios response = (ListarTorneios) enviarObj(obj, conn);
-
-                if (response != null) {
-                    if (response.completed) {
-                        response.mostrarListaTorneios();
-                    } else {
+                    if (response != null) {
                         System.out.println(response.msg);
-                    }
-                } else {
-                    System.out.println("Erro no objeto de retorno.");
-                }
-            }
-            // Listar Torneios por Jogador
-            case "4" -> {
-                System.out.print("Insira o id do Jogador: ");
-                int idJogador = Integer.parseInt(br.readLine());
-
-                System.out.println("Torneios Registados: ");
-                ListarTorneios obj = new ListarTorneios(idJogador);
-
-                ListarTorneios response = (ListarTorneios) enviarObj(obj, conn);
-
-                if (response != null) {
-                    if (response.completed) {
-                        response.mostrarListaTorneios();
                     } else {
-                        System.out.println(response.msg);
+                        System.out.println("Erro no objeto de retorno.");
                     }
-                } else {
-                    System.out.println("Erro no objeto de retorno.");
                 }
-            }
-            // Listar Torneios por Estado
-            case "5" -> {
+                // Inscrever Torneio
+                case "2" -> {
+                    System.out.print("Insira o id do Torneio: ");
+                    int torneio = Integer.parseInt(br.readLine());
+                    System.out.print("Insira o id do Jogador: ");
+                    int jogador = Integer.parseInt(br.readLine());
 
-                System.out.println("Selecione um Estado: ");
-                System.out.println("1- Agendado     2- Ativo      3- Concluído");
-                op = br.readLine();
+                    InscreverTorneio obj = new InscreverTorneio(torneio, jogador);
 
-                //Seleciona o estado a partir da escolha
-                op = estadoTorneio(op);
+                    InscreverTorneio response = (InscreverTorneio) enviarObj(obj, conn);
 
-                if (op != null) {
+                    if (response != null) {
+                        System.out.println(response.msg);
+                    } else {
+                        System.out.println("Erro no objeto de retorno.");
+                    }
+                }
+                // Listar Todos Torneios
+                case "3" -> {
                     System.out.println("Torneios Registados: ");
-                    ListarTorneios obj = new ListarTorneios(op);
+                    ListarTorneios obj = new ListarTorneios();
 
                     ListarTorneios response = (ListarTorneios) enviarObj(obj, conn);
 
@@ -147,121 +103,121 @@ public class ClienteGeral {
                         System.out.println("Erro no objeto de retorno.");
                     }
                 }
-            }
-            // Listar Todas as Partidas
-            case "6" -> {
+                // Listar Torneios por Jogador
+                case "4" -> {
+                    System.out.print("Insira o id do Jogador: ");
+                    int idJogador = Integer.parseInt(br.readLine());
 
-                System.out.println("Partidas Registados: ");
-                ListarPartidas obj = new ListarPartidas();
-                enviarObj(obj, conn);
+                    System.out.println("Torneios Registados: ");
+                    ListarTorneios obj = new ListarTorneios(idJogador);
 
-                ListarPartidas response = (ListarPartidas) enviarObj(obj, conn);
+                    ListarTorneios response = (ListarTorneios) enviarObj(obj, conn);
 
-                if (response != null) {
-                    if (response.completed) {
-                        response.mostrarListaPartidas();
+                    if (response != null) {
+                        if (response.completed) {
+                            response.mostrarListaTorneios();
+                        } else {
+                            System.out.println(response.msg);
+                        }
                     } else {
-                        System.out.println(response.msg);
+                        System.out.println("Erro no objeto de retorno.");
                     }
-                } else {
-                    System.out.println("Erro no objeto de retorno.");
                 }
-            }
-            // Listar Partidas por Jogador
-            case "7" -> {
+                // Listar Torneios por Estado
+                case "5" -> {
 
-                System.out.print("Selecione o ID do Jogador: ");
-                int idJogador = Integer.parseInt(br.readLine());
+                    System.out.println("Selecione um Estado: ");
+                    System.out.println("1- Agendado     2- Ativo      3- Concluído");
+                    op = br.readLine();
 
-                System.out.println("Partidas Registados: ");
-                ListarPartidas obj = new ListarPartidas(idJogador, idJogador);
-                enviarObj(obj, conn);
+                    //Seleciona o estado a partir da escolha
+                    op = estadoTorneio(op);
 
-                ListarPartidas response = (ListarPartidas) enviarObj(obj, conn);
+                    if (op != null) {
+                        System.out.println("Torneios Registados: ");
 
-                if (response != null) {
-                    if (response.completed) {
-                        response.mostrarListaPartidas();
+                        ListarTorneios obj = new ListarTorneios(op);
+
+                        ListarTorneios response = (ListarTorneios) enviarObj(obj, conn);
+
+                        if (response != null) {
+                            if (response.completed) {
+                                response.mostrarListaTorneios();
+                            } else {
+                                System.out.println(response.msg);
+                            }
+                        } else {
+                            System.out.println("Erro no objeto de retorno.");
+                        }
+                    }
+                }
+                // Listar Todas as Partidas
+                case "6" -> {
+
+                    System.out.println("Partidas Registados: ");
+                    ListarPartidas obj = new ListarPartidas();
+                    enviarObj(obj, conn);
+
+                    ListarPartidas response = (ListarPartidas) enviarObj(obj, conn);
+
+                    if (response != null) {
+                        if (response.completed) {
+                            response.mostrarListaPartidas();
+                        } else {
+                            System.out.println(response.msg);
+                        }
                     } else {
-                        System.out.println(response.msg);
+                        System.out.println("Erro no objeto de retorno.");
                     }
-                } else {
-                    System.out.println("Erro no objeto de retorno.");
                 }
-            }
-            // Listar Partidas por Torneio
-            case "8" -> {
-                System.out.print("Selecione o ID do Torneio: ");
-                int idTorneio = Integer.parseInt(br.readLine());
+                // Listar Partidas por Jogador
+                case "7" -> {
 
-                System.out.println("Partidas Registados: ");
-                ListarPartidas obj = new ListarPartidas(idTorneio);
-                enviarObj(obj, conn);
+                    System.out.print("Selecione o ID do Jogador: ");
+                    int idJogador = Integer.parseInt(br.readLine());
 
-                ListarPartidas response = (ListarPartidas) enviarObj(obj, conn);
+                    System.out.println("Partidas Registados: ");
+                    ListarPartidas obj = new ListarPartidas(idJogador, idJogador);
+                    enviarObj(obj, conn);
 
-                if (response != null) {
-                    if (response.completed) {
-                        response.mostrarListaPartidas();
+                    ListarPartidas response = (ListarPartidas) enviarObj(obj, conn);
+
+                    if (response != null) {
+                        if (response.completed) {
+                            response.mostrarListaPartidas();
+                        } else {
+                            System.out.println(response.msg);
+                        }
                     } else {
-                        System.out.println(response.msg);
+                        System.out.println("Erro no objeto de retorno.");
                     }
-                } else {
-                    System.out.println("Erro no objeto de retorno.");
                 }
-            }
-            // Listar Todos os Jogadores
-            case "9" -> {
+                // Listar Partidas por Torneio
+                case "8" -> {
+                    System.out.print("Selecione o ID do Torneio: ");
+                    int idTorneio = Integer.parseInt(br.readLine());
 
-                System.out.println("Jogadores Registados: ");
-                ListarJogadores obj = new ListarJogadores();
+                    System.out.println("Partidas Registados: ");
+                    ListarPartidas obj = new ListarPartidas(idTorneio);
+                    enviarObj(obj, conn);
 
-                ListarJogadores response = (ListarJogadores) enviarObj(obj, conn);
+                    ListarPartidas response = (ListarPartidas) enviarObj(obj, conn);
 
-                if (response != null) {
-                    if (response.completed) {
-                        response.mostrarListaJogadores();
+                    if (response != null) {
+                        if (response.completed) {
+                            response.mostrarListaPartidas();
+                        } else {
+                            System.out.println(response.msg);
+                        }
                     } else {
-                        System.out.println(response.msg);
+                        System.out.println("Erro no objeto de retorno.");
                     }
-                } else {
-                    System.out.println("Erro no objeto de retorno.");
                 }
-            }
-            // Listar Jogadores por Torneio
-            case "10" -> {
-                System.out.print("Selecione um Torneio: ");
-                op = br.readLine();
+                // Listar Todos os Jogadores
+                case "9" -> {
 
-                System.out.println("Jogadores Registados: ");
-                ListarJogadores obj = new ListarJogadores(Integer.parseInt(op));
-
-                ListarJogadores response = (ListarJogadores) enviarObj(obj, conn);
-
-                if (response != null) {
-                    if (response.completed) {
-                        response.mostrarListaJogadores();
-                    } else {
-                        System.out.println(response.msg);
-                    }
-                } else {
-                    System.out.println("Erro no objeto de retorno.");
-                }
-            }
-            // Listar Jogadores por Estado
-            case "11" -> {
-
-                System.out.println("Selecione um Estado: ");
-                System.out.println("1- Inscrito     2- Em Jogo      3- Eliminado");
-                op = br.readLine();
-
-                // Seleciona o estado a partir da escolha
-                op = estadoJogador(op);
-
-                // Se a opção for válida
-                if (op != null) {
                     System.out.println("Jogadores Registados: ");
-                    ListarJogadores obj = new ListarJogadores(op);
+                    ListarJogadores obj = new ListarJogadores();
 
                     ListarJogadores response = (ListarJogadores) enviarObj(obj, conn);
 
@@ -275,10 +231,60 @@ public class ClienteGeral {
                         System.out.println("Erro no objeto de retorno.");
                     }
                 }
+                // Listar Jogadores por Torneio
+                case "10" -> {
+                    System.out.print("Selecione um Torneio: ");
+                    op = br.readLine();
+
+                    System.out.println("Jogadores Registados: ");
+                    ListarJogadores obj = new ListarJogadores(Integer.parseInt(op));
+
+                    ListarJogadores response = (ListarJogadores) enviarObj(obj, conn);
+
+                    if (response != null) {
+                        if (response.completed) {
+                            response.mostrarListaJogadores();
+                        } else {
+                            System.out.println(response.msg);
+                        }
+                    } else {
+                        System.out.println("Erro no objeto de retorno.");
+                    }
+                }
+                // Listar Jogadores por Estado
+                case "11" -> {
+
+                    System.out.println("Selecione um Estado: ");
+                    System.out.println("1- Inscrito     2- Em Jogo      3- Eliminado");
+                    op = br.readLine();
+
+                    // Seleciona o estado a partir da escolha
+                    op = estadoJogador(op);
+
+                    // Se a opção for válida
+                    if (op != null) {
+                        System.out.println("Jogadores Registados: ");
+                        ListarJogadores obj = new ListarJogadores(op);
+
+                        ListarJogadores response = (ListarJogadores) enviarObj(obj, conn);
+
+                        if (response != null) {
+                            if (response.completed) {
+                                response.mostrarListaJogadores();
+                            } else {
+                                System.out.println(response.msg);
+                            }
+                        } else {
+                            System.out.println("Erro no objeto de retorno.");
+                        }
+                    }
+                }
+                // Sair do programa
+                case "12" -> System.exit(0);
+                default -> System.out.println("Opção Inválida");
             }
-            // Sair do programa
-            case "12" -> System.exit(0);
-            default -> System.out.println("Opção Inválida");
+        }catch (Exception e) {
+            System.out.println("Input Inválido: " + e.getMessage());
         }
         conn.close();
     }

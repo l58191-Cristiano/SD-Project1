@@ -41,4 +41,15 @@ public interface funcAdm extends Remote {
 
     // Atualiza o estado geral de um torneio (Agendado/Ativo/Encerrado)
     String estadoGeralTorneio(int id_torneio, String estado_torneio) throws RemoteException;
+
+    // Remove o Jogador da base de dados
+    String remJogador(int id_jogador) throws  RemoteException;
+
+    // Remove o Jogador de todos os Torneios (Por consequente das partidas também)
+    String remJogadorTorneios(int id_jogador) throws RemoteException;
+
+    // Remove o Jogador de todas as Partidas
+    String remJogadorPartidas(int id_jogador) throws RemoteException;
+
+    List<Auditoria> verAuditoriaJ() throws RemoteException;
 }

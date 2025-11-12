@@ -331,59 +331,51 @@ public class funcAdmImpl extends UnicastRemoteObject implements funcAdm, Seriali
     }
 
     // Quero fazer isto modular, mas nao sei como D:, talvez uma private class auxiliar
-    public void remJogador(int id_jogador) {
-        try (Connection connection = this.connector.getConnection()) {
+    public String remJogador(int id_jogador) {
 
-            try {
-                connection.setAutoCommit(false);
+        try {
+            this.connector.getConnection().setAutoCommit(false);
+            // Copia do remJogadorPartidas e remJogadorTorneios
+            String sqlPartidas = "DELETE FROM Partidas WHERE id_jogador_1 = ? OR id_jogador_2 = ?";
+            try (PreparedStatement statement = this.connector.getConnection().prepareStatement(sqlPartidas)) {
+                statement.setInt(1, id_jogador);
+                statement.setInt(2, id_jogador);
+                statement.executeUpdate();
+            }
 
-                // Copia do remJogadorPartidas e remJogadorTorneios
-                String sqlPartidas = "DELETE FROM Partidas WHERE id_jogador_1 = ? OR id_jogador_2 = ?";
-                try (PreparedStatement statement = this.connector.getConnection().prepareStatement(sqlPartidas)) {
-                    statement.setInt(1, id_jogador);
-                    statement.setInt(2, id_jogador);
-                    statement.executeUpdate();
-                }
+            String sqlTorneios = "DELETE FROM Inscricoes WHERE id_jogador = ?";
+            try (PreparedStatement statement = this.connector.getConnection().prepareStatement(sqlTorneios)) {
+                statement.setInt(1, id_jogador);
+                statement.executeUpdate();
+            }
 
-                String sqlTorneios = "DELETE FROM Inscricoes WHERE id_jogador = ?";
-                try (PreparedStatement statement = this.connector.getConnection().prepareStatement(sqlTorneios)) {
-                    statement.setInt(1, id_jogador);
-                    statement.executeUpdate();
-                }
+            String sqlJogador = "DELETE FROM Jogadores WHERE id_jogador = ?";
+            try (PreparedStatement statement = this.connector.getConnection().prepareStatement(sqlJogador)) {
+                statement.setInt(1, id_jogador);
+                statement.executeUpdate();
+            }
 
-                String sqlJogador = "DELETE FROM Jogadores WHERE id_jogador = ?";
-                try (PreparedStatement statement = this.connector.getConnection().prepareStatement(sqlJogador)) {
-                    statement.setInt(1, id_jogador);
-                    statement.executeUpdate();
-                }
-
-                connection.commit();
-                IO.println("Jogador " + id_jogador + " removido de toda a base de dados.");
-            } catch (SQLException e) {
+            this.connector.getConnection().commit();
+            IO.println("Jogador " + id_jogador + " removido de toda a base de dados.");
+            this.connector.getConnection().setAutoCommit(true);
+        }
+        catch (SQLException e) {
                 System.err.println("Erro ao remover jogador da base de dados: " + e.getMessage());
                 try {
-                    connection.rollback();
+                    this.connector.getConnection().rollback();
+                    this.connector.getConnection().setAutoCommit(true);
+                    return "Erro ao remover jogador da base de dados: " + e.getMessage();
                 } catch (SQLException ex) {
                     System.err.println("Erro ao reverter transação: " + ex.getMessage());
-                }
-            } finally {
-                // Volta a colocar a conexão normal
-                try {
-                    connection.setAutoCommit(true);
-                } catch (SQLException e) {
-                    e.printStackTrace();
+                    return "Erro ao remover jogador da base de dados: " + e.getMessage() + "\n Erro ao reverter transação: " + ex.getMessage();
                 }
             }
-        } catch (SQLException e) {
-            System.err.println("ERRO: " + e.getMessage());
-        }
+        return "Jogador " + id_jogador + " removido de toda a base de dados.";
     }
 
-    public void remJogadorTorneios(int id_jogador) {
-        try (Connection connection = this.connector.getConnection()) {
-
-            try {
-                connection.setAutoCommit(false);
+    public String remJogadorTorneios(int id_jogador) {
+        try {
+                this.connector.getConnection().setAutoCommit(false);
 
                 // Mesma logica que remJogadorPartidas
                 String sqlPartidas = "DELETE FROM Partidas WHERE id_jogador_1 = ? OR id_jogador_2 = ?";
@@ -399,29 +391,31 @@ public class funcAdmImpl extends UnicastRemoteObject implements funcAdm, Seriali
                     statement.executeUpdate();
                 }
 
-                connection.commit();
+                this.connector.getConnection().commit();
                 IO.println("Jogador " + id_jogador + " removido de todos os torneios (Partidas e Inscrições).");
             } catch (SQLException e) {
                 System.err.println("Erro ao remover jogador dos torneios: " + e.getMessage());
                 try {
-                    connection.rollback();
+                    this.connector.getConnection().rollback();
+                    // Volta a colocar a conexão normal
+                    this.connector.getConnection().setAutoCommit(true);
+                    return "Erro ao remover jogador dos torneios: " + e.getMessage();
                 } catch (SQLException ex) {
                     System.err.println("Erro ao reverter transação: " + ex.getMessage());
+                    return "Erro ao remover jogador dos torneios: " + e.getMessage() + "\nErro ao reverter transação:" + ex.getMessage();
                 }
             } finally {
                 // Volta a colocar a conexão normal
                 try {
-                    connection.setAutoCommit(true);
+                    this.connector.getConnection().setAutoCommit(true);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
-        } catch (SQLException e) {
-            System.err.println("ERRO: " + e.getMessage());
-        }
+        return "Jogador " +id_jogador + " removido de todos os torneios (Partidas e Inscrições).";
     }
 
-    public void remJogadorPartidas(int id_jogador) {
+    public String remJogadorPartidas(int id_jogador) {
         String sql = "DELETE FROM Partidas WHERE id_jogador_1 = ? OR id_jogador_2 = ?";
         try (PreparedStatement statement = this.connector.getConnection().prepareStatement(sql)) {
             statement.setInt(1, id_jogador);
@@ -430,12 +424,34 @@ public class funcAdmImpl extends UnicastRemoteObject implements funcAdm, Seriali
             int remLinhas = statement.executeUpdate();
             if (remLinhas > 0) {
                 IO.println("Jogador " + id_jogador + " removido de " + remLinhas + " partidas.");
+                return "Jogador " + id_jogador + " removido de " + remLinhas + " partidas.";
             } else {
                 IO.println("ERRO: Jogador " + id_jogador + " não foi encontrado em nenhuma partida");
+                return "Jogador " + id_jogador + " removido de " + remLinhas + " partidas.";
             }
         } catch (SQLException e) {
             System.err.println("Erro ao remover jogador da partida: " + e.getMessage());
+            return "Erro ao remover jogador da partida: " + e.getMessage();
         }
 
+    }
+
+    public List<Auditoria> verAuditoriaJ() {
+        List<Auditoria> auditorias = new ArrayList<>();
+
+        String sql = "SELECT * FROM auditoria WHERE nome_tabela = ?";
+
+        try (PreparedStatement statement = this.connector.getConnection().prepareStatement(sql)) {
+            statement.setString(1, "jogadores");
+
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    auditorias.add(new Auditoria(rs.getInt("id_auditoria"), rs.getString("nome_tabela"), rs.getInt("id_jogador"), rs.getString("operacao"), rs.getString("old_values"), rs.getString("new_values"), rs.getTimestamp("timestamp").toString()));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao listar auditoria dos Jogadores: " + e.getMessage());
+        }
+        return auditorias;
     }
 }
