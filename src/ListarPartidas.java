@@ -8,10 +8,10 @@ public class ListarPartidas extends funcGeral {
 
     public int id_jogador;
     public int id_torneio;
-    //Fica guardado o resultado da query
-    List<Partida> partidasR = new ArrayList<>();
     public String msg;
     public boolean completed;
+    // Fica guardado o resultado da query
+    List<Partida> partidasR = new ArrayList<>();
 
     ListarPartidas() {
         id_torneio = -1;

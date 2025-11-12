@@ -8,10 +8,10 @@ public class ListarTorneios extends funcGeral {
 
     public String estado_torneio;
     public int id_jogador;
-    // Fica guardado o resultado da query
-    List<Torneio> torneiosR = new ArrayList<>();
     public String msg;
     public boolean completed;
+    // Fica guardado o resultado da query
+    List<Torneio> torneiosR = new ArrayList<>();
 
     public ListarTorneios() {
         estado_torneio = null;

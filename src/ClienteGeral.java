@@ -23,7 +23,7 @@ public class ClienteGeral {
             System.out.println("7.  Listar Partidas por Jogadores    8. Listar Partidas por Torneios    9. Listar Todos os Jogadores");
             System.out.println("10. Listar Jogadores por Torneio     11. Listar Jogadores por Estado    12. Sair ");
 
-            while(true){
+            while (true) {
 
                 Socket conn = new Socket(cl.addr, cl.port);
                 System.out.print("Escolha uma opção: ");
@@ -92,10 +92,9 @@ public class ClienteGeral {
                 ListarTorneios response = (ListarTorneios) enviarObj(obj, conn);
 
                 if (response != null) {
-                    if(response.completed) {
+                    if (response.completed) {
                         response.mostrarListaTorneios();
-                    }
-                    else{
+                    } else {
                         System.out.println(response.msg);
                     }
                 } else {
@@ -113,10 +112,9 @@ public class ClienteGeral {
                 ListarTorneios response = (ListarTorneios) enviarObj(obj, conn);
 
                 if (response != null) {
-                    if(response.completed) {
+                    if (response.completed) {
                         response.mostrarListaTorneios();
-                    }
-                    else{
+                    } else {
                         System.out.println(response.msg);
                     }
                 } else {
@@ -140,10 +138,9 @@ public class ClienteGeral {
                     ListarTorneios response = (ListarTorneios) enviarObj(obj, conn);
 
                     if (response != null) {
-                        if(response.completed) {
+                        if (response.completed) {
                             response.mostrarListaTorneios();
-                        }
-                        else{
+                        } else {
                             System.out.println(response.msg);
                         }
                     } else {
@@ -161,10 +158,9 @@ public class ClienteGeral {
                 ListarPartidas response = (ListarPartidas) enviarObj(obj, conn);
 
                 if (response != null) {
-                    if(response.completed) {
+                    if (response.completed) {
                         response.mostrarListaPartidas();
-                    }
-                    else{
+                    } else {
                         System.out.println(response.msg);
                     }
                 } else {
@@ -184,10 +180,9 @@ public class ClienteGeral {
                 ListarPartidas response = (ListarPartidas) enviarObj(obj, conn);
 
                 if (response != null) {
-                    if(response.completed) {
+                    if (response.completed) {
                         response.mostrarListaPartidas();
-                    }
-                    else{
+                    } else {
                         System.out.println(response.msg);
                     }
                 } else {
@@ -206,10 +201,9 @@ public class ClienteGeral {
                 ListarPartidas response = (ListarPartidas) enviarObj(obj, conn);
 
                 if (response != null) {
-                    if(response.completed) {
+                    if (response.completed) {
                         response.mostrarListaPartidas();
-                    }
-                    else{
+                    } else {
                         System.out.println(response.msg);
                     }
                 } else {
@@ -225,16 +219,14 @@ public class ClienteGeral {
                 ListarJogadores response = (ListarJogadores) enviarObj(obj, conn);
 
                 if (response != null) {
-                    if(response.completed) {
+                    if (response.completed) {
                         response.mostrarListaJogadores();
-                    }
-                    else{
+                    } else {
                         System.out.println(response.msg);
                     }
                 } else {
                     System.out.println("Erro no objeto de retorno.");
                 }
-
             }
             // Listar Jogadores por Torneio
             case "10" -> {
@@ -247,10 +239,9 @@ public class ClienteGeral {
                 ListarJogadores response = (ListarJogadores) enviarObj(obj, conn);
 
                 if (response != null) {
-                    if(response.completed) {
+                    if (response.completed) {
                         response.mostrarListaJogadores();
-                    }
-                    else{
+                    } else {
                         System.out.println(response.msg);
                     }
                 } else {
@@ -275,10 +266,9 @@ public class ClienteGeral {
                     ListarJogadores response = (ListarJogadores) enviarObj(obj, conn);
 
                     if (response != null) {
-                        if(response.completed) {
+                        if (response.completed) {
                             response.mostrarListaJogadores();
-                        }
-                        else{
+                        } else {
                             System.out.println(response.msg);
                         }
                     } else {

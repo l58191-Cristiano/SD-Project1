@@ -1,10 +1,7 @@
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +25,6 @@ public class funcAdmImpl extends UnicastRemoteObject implements funcAdm, Seriali
                 while (rs.next()) {
                     torneios.add(new Torneio(rs.getInt("id_torneio"), rs.getString("nome"), rs.getDate("data"), rs.getString("local"), rs.getInt("premio"), rs.getString("estado_torneio"), rs.getString("estado_admin")));
                 }
-
             }
         } catch (SQLException e) {
             System.err.println("Erro ao listar torneios por estado_admin: " + e.getMessage());
@@ -77,7 +73,14 @@ public class funcAdmImpl extends UnicastRemoteObject implements funcAdm, Seriali
             return "AVISO: Um jogador não pode jogar contra si mesmo.";
         }
 
-        // Segundo, verifica se o torneio esta aprovado e se existe
+        // Segundo, garante a ordem (id1 < id2) p/ verificacao
+        if (id_jogador_1 > id_jogador_2) {
+            int aux = id_jogador_1;
+            id_jogador_1 = id_jogador_2;
+            id_jogador_2 = aux;
+        }
+
+        // Terceiro, verifica se o torneio esta aprovado e se existe
         String sqlCheck = "SELECT estado_admin FROM Torneios WHERE id_torneio = ?";
         try (PreparedStatement checkStmt = this.connector.getConnection().prepareStatement(sqlCheck)) {
             checkStmt.setInt(1, id_torneio);
@@ -101,13 +104,13 @@ public class funcAdmImpl extends UnicastRemoteObject implements funcAdm, Seriali
             return "Erro ao verificar estado do torneio: " + e.getMessage();
         }
 
-        // Terceiro, verifica se os jogadores estao no torneio
+        // Quarto, verifica se os jogadores estao no torneio
         String sqlCheckJogadores = "SELECT COUNT(id_jogador) FROM Inscricoes WHERE id_torneio = ? AND (id_jogador = ? OR id_jogador = ?)";
 
         try (PreparedStatement checkJdr = this.connector.getConnection().prepareStatement(sqlCheckJogadores)) {
             checkJdr.setInt(1, id_torneio);
-            checkJdr.setInt(2, id_jogador_1);
-            checkJdr.setInt(3, id_jogador_2);
+            checkJdr.setInt(2, id_jogador_1); // ID mais baixo
+            checkJdr.setInt(3, id_jogador_2); // ID mais alto
 
             try (ResultSet rs = checkJdr.executeQuery()) {
                 if (rs.next()) {
@@ -166,7 +169,6 @@ public class funcAdmImpl extends UnicastRemoteObject implements funcAdm, Seriali
             System.err.println("Erro ao registar resultado da partida: " + e.getMessage());
             return "Erro ao registar resultado da partida: " + e.getMessage();
         }
-
     }
 
     public String estadoPartida(int id_partida, String estado_partida) {
@@ -326,7 +328,114 @@ public class funcAdmImpl extends UnicastRemoteObject implements funcAdm, Seriali
             System.err.println("Erro ao atualizar estado_torneio: " + e.getMessage());
             return "Erro ao atualizar estado_torneio: " + e.getMessage();
         }
-
     }
 
+    // Quero fazer isto modular, mas nao sei como D:, talvez uma private class auxiliar
+    public void remJogador(int id_jogador) {
+        try (Connection connection = this.connector.getConnection()) {
+
+            try {
+                connection.setAutoCommit(false);
+
+                // Copia do remJogadorPartidas e remJogadorTorneios
+                String sqlPartidas = "DELETE FROM Partidas WHERE id_jogador_1 = ? OR id_jogador_2 = ?";
+                try (PreparedStatement statement = this.connector.getConnection().prepareStatement(sqlPartidas)) {
+                    statement.setInt(1, id_jogador);
+                    statement.setInt(2, id_jogador);
+                    statement.executeUpdate();
+                }
+
+                String sqlTorneios = "DELETE FROM Inscricoes WHERE id_jogador = ?";
+                try (PreparedStatement statement = this.connector.getConnection().prepareStatement(sqlTorneios)) {
+                    statement.setInt(1, id_jogador);
+                    statement.executeUpdate();
+                }
+
+                String sqlJogador = "DELETE FROM Jogadores WHERE id_jogador = ?";
+                try (PreparedStatement statement = this.connector.getConnection().prepareStatement(sqlJogador)) {
+                    statement.setInt(1, id_jogador);
+                    statement.executeUpdate();
+                }
+
+                connection.commit();
+                IO.println("Jogador " + id_jogador + " removido de toda a base de dados.");
+            } catch (SQLException e) {
+                System.err.println("Erro ao remover jogador da base de dados: " + e.getMessage());
+                try {
+                    connection.rollback();
+                } catch (SQLException ex) {
+                    System.err.println("Erro ao reverter transação: " + ex.getMessage());
+                }
+            } finally {
+                // Volta a colocar a conexão normal
+                try {
+                    connection.setAutoCommit(true);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("ERRO: " + e.getMessage());
+        }
+    }
+
+    public void remJogadorTorneios(int id_jogador) {
+        try (Connection connection = this.connector.getConnection()) {
+
+            try {
+                connection.setAutoCommit(false);
+
+                // Mesma logica que remJogadorPartidas
+                String sqlPartidas = "DELETE FROM Partidas WHERE id_jogador_1 = ? OR id_jogador_2 = ?";
+                try (PreparedStatement statement = this.connector.getConnection().prepareStatement(sqlPartidas)) {
+                    statement.setInt(1, id_jogador);
+                    statement.setInt(2, id_jogador);
+                    statement.executeUpdate();
+                }
+
+                String sqlTorneios = "DELETE FROM Inscricoes WHERE id_jogador = ?";
+                try (PreparedStatement statement = this.connector.getConnection().prepareStatement(sqlTorneios)) {
+                    statement.setInt(1, id_jogador);
+                    statement.executeUpdate();
+                }
+
+                connection.commit();
+                IO.println("Jogador " + id_jogador + " removido de todos os torneios (Partidas e Inscrições).");
+            } catch (SQLException e) {
+                System.err.println("Erro ao remover jogador dos torneios: " + e.getMessage());
+                try {
+                    connection.rollback();
+                } catch (SQLException ex) {
+                    System.err.println("Erro ao reverter transação: " + ex.getMessage());
+                }
+            } finally {
+                // Volta a colocar a conexão normal
+                try {
+                    connection.setAutoCommit(true);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("ERRO: " + e.getMessage());
+        }
+    }
+
+    public void remJogadorPartidas(int id_jogador) {
+        String sql = "DELETE FROM Partidas WHERE id_jogador_1 = ? OR id_jogador_2 = ?";
+        try (PreparedStatement statement = this.connector.getConnection().prepareStatement(sql)) {
+            statement.setInt(1, id_jogador);
+            statement.setInt(2, id_jogador);
+
+            int remLinhas = statement.executeUpdate();
+            if (remLinhas > 0) {
+                IO.println("Jogador " + id_jogador + " removido de " + remLinhas + " partidas.");
+            } else {
+                IO.println("ERRO: Jogador " + id_jogador + " não foi encontrado em nenhuma partida");
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao remover jogador da partida: " + e.getMessage());
+        }
+
+    }
 }

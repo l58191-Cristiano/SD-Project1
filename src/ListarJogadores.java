@@ -9,9 +9,9 @@ public class ListarJogadores extends funcGeral {
     public int id_torneio;
     public String estado_geral;
     public boolean completed;
+    public String msg;
     // Fica guardado o resultado da query
     List<Jogador> jogadoresR = new ArrayList<>();
-    public String msg;
 
     ListarJogadores() {
         id_torneio = -1;
@@ -27,7 +27,6 @@ public class ListarJogadores extends funcGeral {
         this.estado_geral = estado;
         this.id_torneio = -1;
     }
-
 
     // Listar todos os jogadores
     public void listarJogadores(PostgresConnector connector) {

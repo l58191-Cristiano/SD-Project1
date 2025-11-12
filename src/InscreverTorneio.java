@@ -30,10 +30,10 @@ public class InscreverTorneio extends funcGeral {
         } catch (SQLException e) {
             // O codigo 23505 é para unique_violation
             if (e.getSQLState().equals("23505")) {
-                msg ="Erro: O jogador " + id_jogador + " já está inscrito no torneio " + id_torneio + ".";
+                msg = "Erro: O jogador " + id_jogador + " já está inscrito no torneio " + id_torneio + ".";
                 System.err.println(msg);
             } else {
-                msg ="Erro ao inscrever jogador ao torneio: " + e.getMessage();
+                msg = "Erro ao inscrever jogador ao torneio: " + e.getMessage();
                 System.err.println(msg);
             }
         }

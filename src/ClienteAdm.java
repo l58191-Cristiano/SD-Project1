@@ -13,13 +13,13 @@ public class ClienteAdm {
     String regHost;
     String regPort;
 
-    //Registro
+    // Registo
     public ClienteAdm(String regHost, String regPort) {
         this.regHost = regHost;
         this.regPort = regPort;
     }
 
-    static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException {
+    static void main() throws MalformedURLException, NotBoundException, RemoteException {
 
         ClienteAdm cl = new ClienteAdm("localhost", "1099");
         funcAdm objServidor = (funcAdm) java.rmi.Naming.lookup("rmi://" + cl.regHost + ":" + cl.regPort + "/funcAdm");
@@ -28,39 +28,39 @@ public class ClienteAdm {
 
             System.out.println("Opções do servidor: ");
             System.out.println("1- Listar Jogadores por Estado de Aprovação     2- Listar Torneios por Estado de Aprovação      3- Listar Partidas ");
-            System.out.println("4- Regsitar uma Partida                         5- Atualizar Estado de uma Partida              6- Atualizar Resultado de uma Partida ");
+            System.out.println("4- Registar uma Partida                         5- Atualizar Estado de uma Partida              6- Atualizar Resultado de uma Partida ");
             System.out.println("7- Registrar um Torneio                         8- Aprovar um torneio                           9- Modificar o Estado de um Torneio");
-            System.out.println("10- Aprovar um Jogador                          11- Atualizar Rating de um Jogador              12- Atualizar Estado de um JOgador");
+            System.out.println("10- Aprovar um Jogador                          11- Atualizar Rating de um Jogador              12- Atualizar Estado de um Jogador");
             System.out.println("13- Sair do servidor.");
             //Chamar MÉTODOS AQUI
             menu(objServidor);
 
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             System.out.println("Erro: " + e.getMessage());
         }
 
     }
 
-    public static void verListaJ(List<Jogador> list){
+    public static void verListaJ(List<Jogador> list) {
         System.out.println("--------------------------------------");
         System.out.println("| ID do Jogador |       Estado       |");
-        for(Jogador jogador: list){
+        for (Jogador jogador : list) {
             System.out.printf("| %-14d| %-19s|\n", jogador.id_jogador(), jogador.estado_admin());
         }
         System.out.println("--------------------------------------");
     }
-    public static void verListaT(List<Torneio> list){
+
+    public static void verListaT(List<Torneio> list) {
         System.out.println("--------------------------------------");
         System.out.println("| ID do Torneio |       Estado       |");
-        for(Torneio torneio : list){
+        for (Torneio torneio : list) {
             System.out.printf("| %-14d| %-19s|\n", torneio.id_torneio(), torneio.estado_admin());
         }
         System.out.println("--------------------------------------");
     }
 
     //Não é usado por enquanto
-    public static void verListaP(List<Partida> list){
+    public static void verListaP(List<Partida> list) {
         System.out.println("-------------------------------------------------------------------------------");
         System.out.println("| ID | ID Torneio | ID Jogador1 | ID Jogador2 |       Estado       | Vencedor |");
         for (Partida partida : list) {
@@ -73,12 +73,12 @@ public class ClienteAdm {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        while(true){
+        while (true) {
 
             System.out.print("Escolha uma opção: ");
             String op = br.readLine();
 
-            //Listar Jogadores
+            // Listar Jogadores
             switch (op) {
                 // Menu Principal
                 case "0" -> {
@@ -104,7 +104,7 @@ public class ClienteAdm {
                         verListaJ(lista);
                     }
                 }
-                //Listar Torneios
+                // Listar Torneios
                 case "2" -> {
 
                     System.out.println("Selecione o Estado de Aprovação");
@@ -118,14 +118,14 @@ public class ClienteAdm {
                         verListaT(lista);
                     }
                 }
-                //Listar Partidas
+                // Listar Partidas
                 case "3" -> {
 
                     System.out.println("Lista dos Torneios:");
                     List<Partida> lista = objServidor.listarPartidas();
                     verListaP(lista);
                 }
-                //Registrar Partidas
+                // Registar Partidas
                 case "4" -> {
 
                     System.out.print("Escreva o id do Torneio: ");
@@ -137,10 +137,8 @@ public class ClienteAdm {
 
                     String result = objServidor.registarPartida(id_torneio, id_jogador1, id_jogador2);
                     System.out.println(result);
-
                 }
-
-                //Atualizar o Estado de uma Partida
+                // Atualizar o Estado de uma Partida
                 case "5" -> {
 
                     System.out.print("Selecione uma partida:  (Insira o seu id)");
@@ -153,10 +151,8 @@ public class ClienteAdm {
                         String result = objServidor.estadoPartida(id_partida, op);
                         System.out.println(result);
                     }
-
                 }
-
-                //Atualizar o resultado de uma partida
+                // Atualizar o resultado de uma partida
                 case "6" -> {
 
                     System.out.print("Selecione uma partida:  (Insira o seu id)");
@@ -168,8 +164,7 @@ public class ClienteAdm {
                     String result = objServidor.resultadoPartida(id_partida, id_vencedor);
                     System.out.println(result);
                 }
-
-                //Registrar Torneio
+                // Registrar Torneio
                 case "7" -> {
                     try {
 
@@ -196,7 +191,7 @@ public class ClienteAdm {
                         System.out.println("Input Inválido.");
                     }
                 }
-                //Aprovar o Torneio
+                // Aprovar o Torneio
                 case "8" -> {
 
                     System.out.print("Selecione o ID do Torneio: ");
@@ -204,10 +199,8 @@ public class ClienteAdm {
 
                     String result = objServidor.aprovarTorneios(id_torneio);
                     System.out.println(result);
-
                 }
-
-                //Atualizar o Estado de um Torneio
+                // Atualizar o Estado de um Torneio
                 case "9" -> {
 
                     System.out.print("Selecione o ID do Torneio: ");
@@ -220,10 +213,8 @@ public class ClienteAdm {
                         String result = objServidor.estadoGeralTorneio(id_torneio, op);
                         System.out.println(result);
                     }
-
                 }
-
-                //Aprovar Jogador
+                // Aprovar Jogador
                 case "10" -> {
 
                     System.out.print("Selecione o ID do Jogador: ");
@@ -234,7 +225,7 @@ public class ClienteAdm {
 
                 }
 
-                //Atualizar Rating de um Jogador
+                // Atualizar Rating de um Jogador
                 case "11" -> {
 
                     System.out.print("Selecione o ID do Jogador: ");
@@ -244,10 +235,8 @@ public class ClienteAdm {
 
                     String result = objServidor.ratingJogador(id_jogador, new_rating);
                     System.out.println(result);
-
                 }
-
-                //Atualizar Estado de um Jogador
+                // Atualizar Estado de um Jogador
                 case "12" -> {
 
                     System.out.print("Selecione o ID do Jogador: ");
@@ -260,26 +249,20 @@ public class ClienteAdm {
                         String result = objServidor.estadoGeralJogador(id_jogador, op);
                         System.out.println(result);
                     }
-
                 }
-
-                //Sair do Programa
+                // Sair do Programa
                 case "13" -> System.exit(0);
                 default -> System.out.println("Escolha Inválida.");
             }
-
         }
-
-
-
     }
 
-    public static String estadoAprovacao(String op){
+    public static String estadoAprovacao(String op) {
         switch (op) {
-            case "1" ->{
+            case "1" -> {
                 return "Aprovado";
             }
-            case "2" ->{
+            case "2" -> {
                 return "Não Aprovado";
             }
             default -> {
@@ -289,7 +272,7 @@ public class ClienteAdm {
         }
     }
 
-    public static String estadoPartidas(String op){
+    public static String estadoPartidas(String op) {
         switch (op) {
             case "1" -> {
                 return "Agendado";
@@ -307,7 +290,7 @@ public class ClienteAdm {
         }
     }
 
-    public static String estadoTorneios(String op){
+    public static String estadoTorneios(String op) {
         switch (op) {
             case "1" -> {
                 return "Agendado";
@@ -325,7 +308,7 @@ public class ClienteAdm {
         }
     }
 
-    public static String estadoJogadores(String op){
+    public static String estadoJogadores(String op) {
         switch (op) {
             case "1" -> {
                 return "Inscrito";
