@@ -17,7 +17,7 @@ all: compile run-server
 
 # Compilar todas as classes
 compile:
-	$(JAVAC) $(JFLAGS) $(SOURCES)
+	javac $(JFLAGS) $(SOURCES)
 
 # Run das Classes Principais
 run-server:
